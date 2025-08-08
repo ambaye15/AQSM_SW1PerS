@@ -1,17 +1,16 @@
 
-# ATSM_SW1PerS: Instructions for Installation and Use
+# AQSM_SW1PerS: Instructions for Installation and Use
 
-**Author:** 
-**Date:** *
+**Author: Austin MBaye** 
 
 ---
 
 ## Overview
 
-**ATSM_SW1PerS** is a Python package for analyzing repetitive motion patterns using pose estimation and topological data analysis. It was developed to support the classification and analysis of *Stereotypical Motor Movements (SMMs)* observed in individuals with Autism Spectrum Disorder (ASD). The package provides modules for:
+**AQSM_SW1PerS** is a Python package for analyzing repetitive motion patterns using pose estimation and topological data analysis. It was developed to support the classification and analysis of *Stereotypical Motor Movements (SMMs)* observed in individuals with Autism Spectrum Disorder (ASD), but can be applied to any dataset where one aims to quantify and interpret reccurrent patterns in time series or motion in videos. The package provides modules for:
 
 - Motion tracking
-- Period estimation
+- Sliding Windows Embeddings
 - Persistence diagram computation
 - Topological visualization of time series data
 
@@ -32,14 +31,14 @@
 ### Option 1: Install via GitHub (recommended)
 
 ```bash
-pip install git+https://github.com/ambaye15/ATSM_SW1PerS.git
+pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 ```
 
 ### Option 2: Clone and Install Locally
 
 ```bash
-git clone https://github.com/ambaye15/ATSM_SW1PerS.git
-cd ATSM_SW1PerS
+git clone https://github.com/ambaye15/AQSM_SW1PerS.git
+cd AQSM_SW1PerS
 pip install -e .
 ```
 
@@ -71,7 +70,7 @@ python -m unittest tests/test_periodicity.py
 
 ## Directory Structure
 
-- `ATSM_SW1PerS/`: Core package with analysis and processing modules  
+- `AQSM_SW1PerS/`: Core package with analysis and processing modules  
 - `Classification_experiments/`: Code for training and evaluation  
 - `notebooks/`: Usage tutorials and visualization demos  
 - `Dataset/`: (Optional) Preprocessed data, YOLO model results, periodicity scores. NOTE- You must download this seperatley given this link: 
@@ -82,7 +81,7 @@ python -m unittest tests/test_periodicity.py
 
 ### `dataset.pkl`
 
-The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from Goodwin et al. Each entry of the `.pkl` file contains the exact follwoing:
+The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the exact following:
 
 - `keypoints`: (x, y, visibility) coordinates  
 - `annotations`: Frame-wise behavior labels (0–3)
@@ -90,10 +89,10 @@ The `.pkl` file contains pose estimation tracking data extracted from MediaPipe�
     -  1 - Rocking
     -  2 - Flapping
     -  3 - Flapping and Rocking
-- `fps`, `frame_count`, `duration` - proivdes the fps, total number of frames and duration of video
--  `name` - Unique identifier for each entry, structured as (child-date\_study).
+- `fps`, `frame_count`, `duration` - proivdes the fps, total number of frames and duration of the video
+- `name` - Unique identifier for each entry, structured as (child-date\_study).
 
-This `.pkl` file contains all necessary pre-processing data for the analysis, while still allowing room for further modifications or new ideas using the raw MediaPipe keypoint data.
+This `.pkl` file contains all necessary pre-processing data for the analysis, while allowing room for further modifications or new ideas using the raw MediaPipe keypoint data.
 
 ### `YOLOv5l/`
 
@@ -118,7 +117,7 @@ See `notebooks/tutorial.ipynb` for a full walkthrough using the `.pkl` file.
 ### Quick Demo
 
 ```python
-from ATSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.SW1PerS import *
 from persim import plot_diagrams 
 import matplotlib.pyplot as plt 
 import numpy as np
@@ -172,4 +171,4 @@ plt.show()
 ## Documentation
 
 Check the GitHub repository for further documentation, examples, and updates:  
- [https://github.com/ambaye15/ATSM_SW1PerS](https://github.com/ambaye15/ATSM_SW1PerS)
+ [https://github.com/ambaye15/AQSM_SW1PerS](https://github.com/ambaye15/AQSM_SW1PerS)
