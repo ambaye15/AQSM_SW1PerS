@@ -1,0 +1,17 @@
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+scikit-learn
+ripser
+persim
+opencv-python
+mediapipe
+filterpy
+sympy
+imbalanced-learn
+scikit-optimize
+joblib
+PyYAML
+umap-learn
