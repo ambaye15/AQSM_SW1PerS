@@ -1,6 +1,6 @@
 import numpy as np
 import unittest
-from ATSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.SW1PerS import *
 
 class TestPeriodicityMethods(unittest.TestCase):
 
