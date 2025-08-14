@@ -207,6 +207,79 @@ def compute_PS(dgm1, method = 'PS1'):
     else:
         print('Not a valid mathod. Choose either 10MPS or 1PS')
 
+# Section: SW1PerS Algorithm
+# ---------------------------
+
+class SW1PerS:
+
+    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47):
+        self.start_time = start_time
+        self.end_time = end_time
+        self.num_points = num_points
+        self.time_values = np.linspace(start_time, end_time, num_points) 
+        self.method = method
+        self.d = d
+        self.prime_coeff = prime_coeff
+
+    def _detrend_and_convert(self, spline_funcs):
+        
+        detrended_signals = [
+            signal.detrend(f(self.time_values)) for f in spline_funcs
+        ]
+
+        X_detrended = np.column_stack(detrended_signals)
+
+        component_splines = [
+            CubicSpline(self.time_values, detrended_signals[i]) for i in range(len(detrended_signals))
+        ]
+
+        num_components = int(len(component_splines))
+        
+        return X_detrended, component_splines, num_components
+        
+        
+    def _estimate_period(self, X_detrended, num_components):
+
+        sampling_rate = self.num_points / (self.end_time - self.start_time)
+
+        if num_components == 2:
+            period = estimate_period(X_detrended[:,0], X_detrended[:,1], sampling_rate)
+        else:
+            period, _ = estimate_period_LAPIS(X_detrended, sampling_rate)
+
+        return period
+
+    
+    def _sliding_windows(self, component_splines, num_components, period):
+
+        d = 23
+        
+        tau = period / (d + 1)    
+
+        SW = SW_cloud_nD(component_splines, self.time_values, tau, d, 300, num_components)
+
+        return SW
+
+    def _1PerS(self, SW):
+        
+        result = ripser(SW, coeff = self.prime_coeff, maxdim = 1) 
+        dgm1 = np.array(result['dgms'][1])
+
+        score = compute_PS(dgm1, method = self.method)
+
+        return score
+
+    def compute_score(self, spline_funcs):
+
+        X_detrended, component_splines, num_components = self._detrend_and_convert(spline_funcs)
+
+        period = self._estimate_period(X_detrended, num_components)
+
+        SW = self._sliding_windows(component_splines, num_components, period)
+
+        score = self._1PerS(SW)
+
+        return score
         
 # Section: Main Algorithm
 # ---------------------------
@@ -231,39 +304,9 @@ def getFeatures(spline_funcs, segments, num_points = 1000, method = 'PS10'):
     #Iterate through each time segment
     for i,segment in enumerate(segments):
         try:
-            start=np.min(segment)
-            end=np.max(segment)
-            
-            #For each time sgement, interolate values to increase resolution
-            t_vals=np.linspace(start, end, num_points) 
+            scoring_pipeline = SW1PerS(start_time = np.min(segment), end_time = np.max(segment), num_points = num_points, method = method, d = d, prime_coeff = prime_coeff))
 
-            detrended_signals = [
-                signal.detrend(f(t_vals)) for f in spline_funcs
-            ]
-            
-            X_detrended = np.column_stack(detrended_signals)
-
-            component_splines = [
-                CubicSpline(t_vals, detrended_signals[i]) for i in range(len(detrended_signals))
-            ]
-
-            num_components = int(len(component_splines))
-            
-            sampling_rate = num_points / (end - start)
-
-            if num_components == 2:
-                period = estimate_period(X_detrended[:,0], X_detrended[:,1], sampling_rate)
-            else:
-                period, _ = estimate_period_LAPIS(X_detrended, sampling_rate)
-
-            tau = period / (d + 1)    
-
-            SW = SW_cloud_nD(component_splines, t_vals, tau, d, 300, num_components)
-                
-            result = ripser(SW, coeff = prime_coeff, maxdim = 1) 
-            dgm1 = np.array(result['dgms'][1])
-
-            score = compute_PS(dgm1, method = method)
+            score = scoring_pipeline.compute_score(spline_funcs)
             
             periodicity_scores.append(score)
             
