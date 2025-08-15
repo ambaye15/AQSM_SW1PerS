@@ -3,7 +3,7 @@ from sympy import mobius, totient
 
 class estimate_period_lapis:
     def __init__(self, fs, f_min = 0.3, f_max = 2.0):
-        self.fs = fs
+        self.fs = fs * (2/19)  #Resample to 10z to reduce memory load while increasing speed and maintaining accuracy
         self.f_min = f_min
         self.f_max = f_max
 
@@ -42,9 +42,9 @@ class estimate_period_lapis:
     def _build_dictionary(self, T, periods):
         cols, colp = [], []
         for p in periods:
-            Pg = _Pg(p)
+            Pg = self._Pg(p)
             for j in range(Pg.shape[1]):
-                cols.append(_extend(Pg[:, j], T)[:, None])
+                cols.append(self._extend(Pg[:, j], T)[:, None])
                 colp.append(p)
         R = np.hstack(cols) if cols else np.zeros((T, 0))
         Hinv = np.diag([1.0 / (p ** 2) for p in colp])                 
@@ -75,6 +75,9 @@ class estimate_period_lapis:
             tol_inner = 1e-5):
         
         from scipy.linalg import cho_factor, cho_solve, svd
+        from scipy.signal import resample_poly
+
+        Y  = resample_poly(Y, up=2, down=19, axis=0)  #Resampling to ~10Hz 
 
         Y = np.asarray(Y, float)
         T, N = Y.shape
@@ -129,7 +132,7 @@ class estimate_period_lapis:
                 Theta1 += rho1 * (P1 - U)
                 Theta2 += rho2 * (P2 - (A @ Uabs))
     
-                if rel_change(U, U_prev) < tol_inner:
+                if self._relative_change(U, U_prev) < tol_inner:
                     break
                 U_prev = U.copy()
 
@@ -145,7 +148,7 @@ class estimate_period_lapis:
                 M += mu * (E - (X - Yf))                        
                 mu *= mu_growth
     
-                if rel_change(X, X_prev) < tol_inner:
+                if self._relative_change(X, X_prev) < tol_inner:
                     break
                 X_prev = X.copy()
 
@@ -180,5 +183,4 @@ class estimate_period_lapis:
 
         fundamental_period = periods_sorted[0] / self.fs
             
-        return fundamental_period, periods_sorted, scores_sorted
-
+        return fundamental_period
