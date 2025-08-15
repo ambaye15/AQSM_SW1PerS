@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import numpy as np
+from scipy.interpolate import CubicSpline
 from AQSM_SW1PerS.SW1PerS import *
 
 def extract_processed_window(X, meta_entry, expected_length=380, sigma=3):
@@ -43,12 +44,13 @@ def SW1PerS_alt(accelerometer_X, meta_data, method = 'PS1'):
 
             timestamps_sec = (accelerometer_window[:, 0] - accelerometer_window[0, 0]) / 1000.0
             ax, ay, az = accelerometer_window[:, 1], accelerometer_window[:, 2], accelerometer_window[:, 3]
-            spline_funcs = [ax, ay, az]
+            fx, fy, fz = CubicSpline(timestamps_sec, ax), CubicSpline(timestamps_sec, ay), CubicSpline(timestamps_sec, az)
+            spline_funcs = [fx, fy, fz]
             sampling_rate = estimate_sampling_rate(accelerometer_window[:, 0])
 
             num_points = int(4 * sampling_rate)
 
-            scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff))
+            scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
 
             score = scoring_pipeline.compute_score(spline_funcs)
 
