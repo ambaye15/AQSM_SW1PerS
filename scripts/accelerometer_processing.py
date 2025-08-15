@@ -16,6 +16,7 @@ import pandas as pd
 import argparse
 import os
 import numpy as np
+from pathlib import Path
 from AQSM_SW1PerS.utils.accelerometer import *
 from AQSM_SW1PerS.SW1PerS import *
 from accelerometer_SW1PerS import *
@@ -75,7 +76,10 @@ def process_folder(folder_path):
 
   PS_df = pd.DataFrame(X_features)
 
-  PS_df.to_csv(f'{filename_cleaned}_scores_position.csv', index=False)
+  path = Path(folder_path)
+  filename_cleaned = path.name
+
+  PS_df.to_csv(f'{filename_cleaned}_scores_accelerometer.csv', index=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a data folder.')
