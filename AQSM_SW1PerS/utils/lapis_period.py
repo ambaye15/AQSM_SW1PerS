@@ -117,6 +117,13 @@ class estimate_period_lapis:
                 c, lower = cho_factor(M_lhs, check_finite=False, overwrite_a=False)
                 DtX = D.T @ X
                 RHS = (s[:, None] * DtX) + rho1 * (P1 - Theta1 / rho1)
+
+                 # === PATCH to couple nuclear-norm term into U-step ===
+                Z = P2 - Theta2 / rho2
+                G = A.T @ (A @ np.abs(U_prev) - Z)   # L×N
+                S = np.sign(U_prev)
+                RHS += - rho2 * (S * G)
+                
                 U = cho_solve((c, lower), RHS, check_finite=False, overwrite_b=False)
     
                 # Proxes
