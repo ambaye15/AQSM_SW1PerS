@@ -260,7 +260,7 @@ def getFeatures(spline_funcs, segments, num_points = 1000, method = 'PS10'):
     #Iterate through each time segment
     for i,segment in enumerate(segments):
         try:
-            scoring_pipeline = SW1PerS(start_time = np.min(segment), end_time = np.max(segment), num_points = num_points, method = method, d = d, prime_coeff = prime_coeff))
+            scoring_pipeline = SW1PerS(start_time = np.min(segment), end_time = np.max(segment), num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
 
             score = scoring_pipeline.compute_score(spline_funcs)
             
