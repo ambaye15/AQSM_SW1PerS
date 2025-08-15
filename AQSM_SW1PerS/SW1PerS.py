@@ -201,7 +201,7 @@ class SW1PerS:
             period = estimate_period(X_detrended[:,0], X_detrended[:,1], sampling_rate)
         else:
             period_estimator = estimate_period_lapis(fs = sampling_rate, f_min = 0.3, f_max = 2.0)
-            period, _ = period_estimator._lapis(X_detrended)
+            period = period_estimator._lapis(X_detrended)
 
         return period
 
