@@ -207,12 +207,10 @@ class SW1PerS:
 
     
     def _sliding_windows(self, component_splines, num_components, period):
-
-        d = 23
         
-        tau = period / (d + 1)    
+        tau = period / (self.d + 1)    
 
-        SW = SW_cloud_nD(component_splines, self.time_values, tau, d, 300, num_components)
+        SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, num_components)
 
         return SW
 
