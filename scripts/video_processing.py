@@ -31,10 +31,12 @@ def getKeypoints(video_path):
         
     model_path = get_data_path("YOLOv5l/yolov5/runs/train/exp/weights", "YOLOv5l_transfer.pt") 
     model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-    
+
     fps, total_frames, duration_seconds, frame_times = get_video_info(video_path)
     
-    create_mediapipe_file(video_path, frame_times, fps, model, create_video = False) 
+    MPPose = MP_pose(frame_times, fps, model, create_video = False)
+
+    MPPose._run_pose_inference(video_path)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a video file.')
