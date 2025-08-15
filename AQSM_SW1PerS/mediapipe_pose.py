@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+from pathlib import Path
 import cv2
 import math
 import numpy as np
@@ -152,10 +153,8 @@ def create_mediapipe_file(filepath, times, fps, model, create_video = True):
     '''
     Using MediaPipe and YOLOv5, we get all (x,y) keypoint coordinates that will automatically be saved to a .csv file
     '''
-    
-    basename = os.path.basename(filepath)  
-    # Remove the .avi suffix
-    cleaned_name = os.path.splitext(basename)[0] 
+    path = Path(filepath)
+    cleaned_name = path.stem
     
     output_video = f'{cleaned_name}_mp.avi'
     cap = cv2.VideoCapture(filepath)
