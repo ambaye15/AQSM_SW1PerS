@@ -25,6 +25,7 @@ from sklearn.neighbors import NearestNeighbors
 import numpy.matlib
 import sympy
 import multiprocessing as multi
+from AQSM_SW1PerS.utils.lapis_period import *
 
 
 # Section: Utility Functions for Algorithm
@@ -140,52 +141,6 @@ def estimate_period(keypoint_x, keypoint_y, sampling_rate):
         
     return period
 
-
-from sklearn.linear_model import Lasso
-
-def generate_filtered_ramanujan_dictionary(T, fs, f_min=0.7, f_max=6.0):
-    min_p = int(np.ceil(fs / f_max))
-    max_p = int(np.floor(fs / f_min))
-    atoms = []
-    periods = []
-
-    for g in range(min_p, max_p + 1):
-        for d in range(1, g + 1):
-            if g % d == 0:
-                atom = np.cos(2 * np.pi * (np.arange(T) % d) / d)
-                atom /= np.linalg.norm(atom)
-                atoms.append(atom)
-                periods.append(d)
-
-    return np.column_stack(atoms), periods
-
-
-def estimate_periods_lapis(Y, fs, f_min=0.7, f_max=6.0, alpha=0.001):
-    T, N = Y.shape
-    D, all_periods = generate_filtered_ramanujan_dictionary(T, fs, f_min, f_max)
-    D = np.nan_to_num(D)
-    y_flat = np.nanmean(Y, axis=1)
-    model = Lasso(alpha=alpha, fit_intercept=False, max_iter=10000)
-    model.fit(D, y_flat)
-    coefs = model.coef_
-    selected_indices = np.where(np.abs(coefs) > 1e-4)[0]
-    selected_periods = [all_periods[i] for i in selected_indices]
-    selected_weights = [coefs[i] for i in selected_indices]
-    return selected_periods, selected_weights, coefs, all_periods
-
-
-def estimate_period_LAPIS(X_interp, sampling_rate):
-    selected_periods, selected_weights, coefs, all_periods = estimate_periods_lapis(
-        X_interp, sampling_rate
-    )
-    if selected_periods:
-        top_idx = np.argmax(np.abs(selected_weights))
-        top_period = selected_periods[top_idx]
-        estimated_freq = sampling_rate / top_period
-        return 1 / estimated_freq, top_period, estimated_freq
-    else:
-        return None, None, None
-
     
 def compute_PS(dgm1, method = 'PS1'):
     try:
@@ -245,7 +200,8 @@ class SW1PerS:
         if num_components == 2:
             period = estimate_period(X_detrended[:,0], X_detrended[:,1], sampling_rate)
         else:
-            period, _ = estimate_period_LAPIS(X_detrended, sampling_rate)
+            period_estimator = estimate_period_lapis(fs = sampling_rate, f_min = 0.3, f_max = 2.0)
+            period, _ = period_estimator._lapis(X_detrended)
 
         return period
 
