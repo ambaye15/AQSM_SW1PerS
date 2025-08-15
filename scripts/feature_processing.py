@@ -15,6 +15,7 @@
 import pandas as pd
 import argparse
 import os
+from pathlib import Path
 import numpy as np
 from AQSM_SW1PerS.utils.data_processing import *
 from AQSM_SW1PerS.SW1PerS import *
@@ -63,10 +64,8 @@ def process(input_video):
 
     video_data = open_pickle(pkl_file)
 
-    if 'study1' in input_video:
-        filename_cleaned = input_video.replace('Videos/', '').replace('.avi', '') 
-    else:
-        filename_cleaned = input_video.replace('Videos/', '').replace('.avi', '')     
+    path = Path(input_video)
+    filename_cleaned = path.stem  
     
     video_entry = next((entry for entry in video_data if entry['name'] == filename_cleaned), None)
         
@@ -107,17 +106,17 @@ def process(input_video):
     
     #Acceleration Representation of Keypoint Movement Splines
     
-    head_accel_splines = CubicSpline(frame_times,head_accel[:,0]), CubicSpline(frame_times,head_accel[:,1])
+    head_accel_splines = [CubicSpline(frame_times,head_accel[:,0]), CubicSpline(frame_times,head_accel[:,1])]
     
-    rw_accel_splines = CubicSpline(frame_times,rwrist_accel[:,0]), CubicSpline(frame_times,rwrist_accel[:,1])
+    rw_accel_splines = [CubicSpline(frame_times,rwrist_accel[:,0]), CubicSpline(frame_times,rwrist_accel[:,1])]
     
-    lw_accel_splines = CubicSpline(frame_times,lwrist_accel[:,0]), CubicSpline(frame_times,lwrist_accel[:,1])
+    lw_accel_splines = [CubicSpline(frame_times,lwrist_accel[:,0]), CubicSpline(frame_times,lwrist_accel[:,1])]
     
-    rs_accel_splines = CubicSpline(frame_times,rshoulder_accel[:,0]), CubicSpline(frame_times,rshoulder_accel[:,1])
+    rs_accel_splines = [CubicSpline(frame_times,rshoulder_accel[:,0]), CubicSpline(frame_times,rshoulder_accel[:,1])]
     
-    ls_accel_splines = CubicSpline(frame_times,lshoulder_accel[:,0]), CubicSpline(frame_times,lshoulder_accel[:,1])
+    ls_accel_splines = [CubicSpline(frame_times,lshoulder_accel[:,0]), CubicSpline(frame_times,lshoulder_accel[:,1])]
     
-    chest_accel_splines = CubicSpline(frame_times,chest_accel[:,0]), CubicSpline(frame_times,chest_accel[:,1])
+    chest_accel_splines = [CubicSpline(frame_times,chest_accel[:,0]), CubicSpline(frame_times,chest_accel[:,1])]
 
     args_list = [
         (head_splines, segments),
@@ -157,7 +156,7 @@ def process(input_video):
     raw_scores_df = pd.DataFrame(X_features_raw)
     accel_scores_df = pd.DataFrame(X_features_accel)
     
-    #Save the scores to cwd
+    #Save the scores to csv
     raw_scores_df.to_csv(f'{filename_cleaned}_scores_position.csv', index=False)
     accel_scores_df.to_csv(f'{filename_cleaned}_scores_accel.csv', index=False)
 
