@@ -15,6 +15,7 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
 from AQSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.utils.accelerometer import *
 
 def extract_processed_window(X, meta_entry, expected_length=380, sigma=3):
     """Extract smoothed and interpolated window from raw accelerometer data."""
