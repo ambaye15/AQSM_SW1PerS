@@ -160,7 +160,7 @@ def compute_PS(dgm1, method = 'PS1'):
     elif method == 'PS1':
         return (persistences[0] * weights[0]) / np.sqrt(3) - (persistences[1] * weights[1]) / np.sqrt(3)
     else:
-        print('Not a valid mathod. Choose either 10MPS or 1PS')
+        print('Not a valid mathod. Choose either PS10 or PS1')
 
 # Section: SW1PerS Algorithm
 # ---------------------------
