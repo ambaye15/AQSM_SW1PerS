@@ -86,6 +86,7 @@ Here is a simple demo of a periodic 2D signal with its persistence diagram and p
 
 ```python
 from AQSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.utils.period_estimation import *
 from persim import plot_diagrams
 import matplotlib.pyplot as plt
 import numpy as np
@@ -96,7 +97,8 @@ x = np.cos(2 * np.pi * t_vals)
 y = np.sin(2 * np.pi * t_vals)
 X = np.column_stack((x, y)) + np.random.normal(scale=0.1, size=(150, 2))
 
-period = estimate_period(X[:, 0], X[:, 1], sampling_rate)
+period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
+period = period_estimator.estimate_period(X)
 
 d = 23
 tau = period / (d + 1)
