@@ -1,13 +1,99 @@
 import numpy as np
+from scipy.signal import find_peaks
 from sympy import mobius, totient
 
-class estimate_period_lapis:
-    def __init__(self, fs, f_min = 0.3, f_max = 2.0):
-        self.fs = fs * (2/19)  #Resample to 10z to reduce memory load while increasing speed and maintaining accuracy
+class PeriodEstimator:
+    def __init__(self, fs, num_components, f_min = 0.5, f_max = 2.0, window_size = 4.0):
+        self.fs = fs
         self.f_min = f_min
         self.f_max = f_max
+        self.num_components = num_components
+        self.window_size = window_size
 
-    # Utils
+    #Section 1: Cases when time series has 1 or 2 components
+    
+    def find_prominent_peaks(self, magnitude_spectrum, threshold, prominence):
+        peaks, _ = find_peaks(magnitude_spectrum, height=threshold, prominence=prominence)
+        sorted_peaks = sorted(peaks, key=lambda p: -magnitude_spectrum[p])
+        cumulative_sum = np.cumsum(magnitude_spectrum[sorted_peaks])
+        total_sum = np.sum(magnitude_spectrum[sorted_peaks])
+        n_peaks = np.searchsorted(cumulative_sum, 0.7 * total_sum, side='right')
+        return sorted_peaks[:n_peaks]
+
+    def band_cutoff(self, frequencies):
+
+        p_min = 1 / self.f_max
+        p_max = 1 / self.f_min
+        
+        epsilon = 1e-10  
+        frequencies = np.where(frequencies == 0, epsilon, frequencies)
+        
+        periods = np.abs(1/frequencies)
+        band = (periods >= p_min) & (periods <= p_max)
+        idx = np.where(band)
+        return idx
+
+    def UNIVARIATE(self, F):
+
+        try:
+            dft = np.fft.fft(F)
+            magnitude_spectrum = np.abs(dft)
+            frequencies = np.fft.fftfreq(len(F), 1/self.fs)
+
+            pos_mask = frequencies > 0
+
+            positive_frequencies = frequencies[pos_mask]
+            positive_magnitude_spectrum = magnitude_spectrum[pos_mask]
+            # Apply band cutoff
+            band_mask = self.band_cutoff(positive_frequencies)   # should return boolean mask or indices
+
+            band_limited_spectrum = np.zeros_like(positive_magnitude_spectrum)
+            band_limited_spectrum[band_mask] = positive_magnitude_spectrum[band_mask]
+            
+            pk = self.find_prominent_peaks(band_limited_spectrum, 0, 0) 
+
+            if pk is None or len(pk) == 0:
+                pk, _ = find_peaks(band_limited_spectrum)
+                pk = [pk[np.argmax(band_limited_spectrum[pk])]] if len(pk) > 0 else []
+           
+            peak_center = positive_frequencies[pk][0]
+            period = np.abs((1/peak_center))
+
+        except:
+            period = np.nan
+            
+        return period
+
+    def BIVARIATE(self, X):
+        
+        F = X[:,0] + 1j * X[:,1]
+        
+        try:
+            dft = np.fft.fft(F)
+            magnitude_spectrum = np.abs(dft)
+            frequencies = np.fft.fftfreq(len(F), 1/self.fs)
+
+            band_mask = self.band_cutoff(frequencies)   # should return boolean mask or indices
+            
+            band_limited_spectrum = np.zeros_like(magnitude_spectrum)
+            band_limited_spectrum[band_mask] = magnitude_spectrum[band_mask]
+            
+            pk = self.find_prominent_peaks(band_limited_spectrum, 0, 0) 
+            if pk is None or len(pk) == 0:
+                pk, _ = find_peaks(band_limited_spectrum)
+                pk = [pk[np.argmax(band_limited_spectrum[pk])]] if len(pk) > 0 else []
+                
+            peak_center = frequencies[pk][0]
+            period = np.abs((1/peak_center))
+
+        except:
+            period = np.nan
+            
+        return period
+    
+
+    #Section 2: Cases when time series has >= 3 components
+
     def _soft_threshold(self, X, tau):
         return np.sign(X) * np.maximum(np.abs(X) - tau, 0.0)
         
@@ -78,14 +164,15 @@ class estimate_period_lapis:
         from scipy.signal import resample_poly
 
         Y  = resample_poly(Y, up=2, down=19, axis=0)  #Resampling to ~10Hz 
+        fs_down = self.fs * (2/19)
 
         Y = np.asarray(Y, float)
         T, N = Y.shape
         W = (~np.isnan(Y)).astype(float)
         Yf = np.nan_to_num(Y, copy=True)
 
-        pmin = max(2, int(np.ceil(self.fs / float(self.f_max))))
-        pmax = int(np.floor(self.fs / float(self.f_min)))
+        pmin = max(2, int(np.ceil(fs_down / float(self.f_max))))
+        pmax = int(np.floor(fs_down / float(self.f_min)))
         periods = list(range(pmin, pmax + 1))
 
         # Dictionary
@@ -188,6 +275,18 @@ class estimate_period_lapis:
             periods_sorted = periods_sorted[:Kmax_periods]
             scores_sorted = scores_sorted[:Kmax_periods]
 
-        fundamental_period = periods_sorted[0] / self.fs
+        fundamental_period = periods_sorted[0] / fs_down
             
         return fundamental_period
+
+    #Section 3: Wrapper that automatically decide which to use based on num_components
+        
+    def estimate_period(self, X):
+
+        if self.num_components == 1:
+            period = self.UNIVARIATE(X)
+        elif self.num_components == 2:
+            period = self.BIVARIATE(X)
+        else:
+            period = self._lapis(X)
+        return period
