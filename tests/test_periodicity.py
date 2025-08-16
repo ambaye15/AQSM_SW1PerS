@@ -15,7 +15,7 @@ class TestPeriodicityMethods(unittest.TestCase):
 
     def test_estimate_period(self):
         period_estimator = PeriodEstimator(self.fs, 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
-        period = PeriodEstimator.estimate_period(X)
+        period = period_estimator.estimate_period(X)
         self.assertTrue(0.9 < period < 1.1)
 
     def test_compute_PS_range(self):
