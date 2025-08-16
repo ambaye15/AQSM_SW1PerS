@@ -1,6 +1,7 @@
 import numpy as np
 import unittest
 from AQSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.utils.period_estimation import *
 
 class TestPeriodicityMethods(unittest.TestCase):
 
@@ -13,7 +14,8 @@ class TestPeriodicityMethods(unittest.TestCase):
         self.X += np.random.normal(scale=0.1, size=self.X.shape)
 
     def test_estimate_period(self):
-        period = estimate_period(self.X[:, 0], self.X[:, 1], self.fs)
+        period_estimator = PeriodEstimator(self.fs, 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
+        period = PeriodEstimator.estimate_period(X)
         self.assertTrue(0.9 < period < 1.1)
 
     def test_compute_PS_range(self):
