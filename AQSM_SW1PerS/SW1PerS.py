@@ -17,7 +17,6 @@ from persim import plot_diagrams
 from scipy.interpolate import CubicSpline
 import pandas as pd
 import numpy as np
-from scipy.signal import find_peaks
 from scipy import signal
 from scipy import interpolate
 from numpy.linalg import norm
@@ -25,24 +24,11 @@ from sklearn.neighbors import NearestNeighbors
 import numpy.matlib
 import sympy
 import multiprocessing as multi
-from AQSM_SW1PerS.utils.lapis_period import *
+from AQSM_SW1PerS.utils.period_estimation import *
 
 
 # Section: Utility Functions for Algorithm
 # -------------------------------------------------
-
-def find_prominent_peaks(magnitude_spectrum, threshold, prominence):
-    '''
-    Tool to find the prominent peaks to be considered for period calculation 
-    '''
-    peaks, _ = find_peaks(magnitude_spectrum, height=threshold, prominence=prominence)
-    sorted_peaks = sorted(peaks, key=lambda p: -magnitude_spectrum[p])
-    cumulative_sum = np.cumsum(magnitude_spectrum[sorted_peaks])
-    total_sum = np.sum(magnitude_spectrum[sorted_peaks])
-    n_peaks = np.searchsorted(cumulative_sum, 0.7 * total_sum, side='right')
-    return sorted_peaks[:n_peaks]
-
-
 
 def knn_density(point_cloud, k = 20):
     '''
@@ -96,52 +82,6 @@ def next_prime(d):
     return sympy.nextprime(d)
 
 
-# Section: Period Estimation
-# We have two ways to estimate the period:   
-# - The primary method used with the pose estimation (x,y) coordinates is via the continuous discrete fourier transfrom presented in the paper. 
-# - The alternative is presented in Supplamentrary Note. 4 for >= 3 component signals
-# -------------------------------------------------
-
-def estimate_period(keypoint_x, keypoint_y, sampling_rate):
-    '''
-    Estimate period using Complex Fast Fourier Transform
-    '''
-    F = keypoint_x + 1j * keypoint_y
-
-    try:
-        dft = np.fft.fft(F)
-        magnitude_spectrum = np.abs(dft)
-        frequencies = np.fft.fftfreq(len(F), 1/sampling_rate)
-        
-        pk = find_prominent_peaks(magnitude_spectrum, 0, 0) 
-        peak_center = frequencies[pk][0]
-        period = np.abs((1/peak_center))
-        
-        window_size = 4
-
-        if period > window_size / 2: #Cutoff Period, we would need at least 2 oscillations to detect periodic motion
-            epsilon = 1e-10  
-            
-            frequencies = np.where(frequencies == 0, epsilon, frequencies)
-        
-            cutoff_period = window_size / 2
-        
-            periods = np.abs(1/frequencies)
-            
-            # Apply cutoff to magnitude spectrum
-            idx = np.where(periods < cutoff_period) 
-            magnitude_spectrum = magnitude_spectrum[idx]
-            frequencies = frequencies[idx]
-            pk = find_prominent_peaks(magnitude_spectrum, 0, 0) 
-        
-            peak_center = frequencies[pk][0]
-            period = np.abs((1/peak_center))
-    except:
-        period = np.nan
-        
-    return period
-
-    
 def compute_PS(dgm1, method = 'PS1'):
     try:
         #Sort the points to get the 10 most persistent points
@@ -197,11 +137,8 @@ class SW1PerS:
 
         sampling_rate = self.num_points / (self.end_time - self.start_time)
 
-        if num_components == 2:
-            period = estimate_period(X_detrended[:,0], X_detrended[:,1], sampling_rate)
-        else:
-            period_estimator = estimate_period_lapis(fs = sampling_rate, f_min = 0.3, f_max = 2.0)
-            period = period_estimator._lapis(X_detrended)
+        period_estimator = PeriodEstimator(sampling_rate, num_components, f_min = 0.5, f_max = 2.0, window_size = (self.end_time - self.start_time))
+        period = PeriodEstimator.estimate_period(X_detrended)
 
         return period
 
@@ -289,8 +226,10 @@ def run_periodicity_demo():
     y = np.sin(2 * np.pi *t_vals)
     X = np.column_stack((x, y))
     X += np.random.normal(scale=0.1, size=X.shape) #Add some noise
-    period = estimate_period(X[:,0], X[:,1], sampling_rate)
 
+    period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
+    period = PeriodEstimator.estimate_period(X)
+    
     d = 23
     tau = period / (d + 1)
     spline_x = CubicSpline(t_vals, X[:,0])
