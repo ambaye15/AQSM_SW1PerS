@@ -57,11 +57,12 @@ AQSM_SW1PerS/
 ├── SW1PerS.py               # Core script for persistence scoring
 ├── mediapipe_pose.py        # Pose extraction pipeline (YOLO + MediaPipe)
 ├── utils/
-│   ├── data_processing.py   # Keypoint smoothing, extraction from pkl
-│   ├── video_tools.py       # Load annotations, read and write videos from Goodwin et al. (2014)
-|   ├── paths.py             # Acess contents of 'Dataset' directory from any other directory
 |   ├── accelerometer.py     # Tools for the accompyaning accelerometer data
-│   └── create_pkl.py        # Construct `dataset.pkl` for the pipeline
+│   ├── create_pkl.py        # Construct `dataset.pkl` for the pipeline  # Keypoint smoothing, extraction from pkl
+│   ├── data_processing.py   # Keypoint smoothing, extraction from pkl
+|   ├── paths.py             # Acess contents of 'Dataset' directory from any other directory
+|   ├── period_estimation.py # Tools to estimate period of multivariate time series
+│   └── video_tools.py       # Load annotations, read and write videos from Goodwin et al. (2014)
 Classification_experiments/  # Model training, evaluation scripts
 notebooks/                   # Demos, tutorials, reproducible figures
 scripts/                     # Batch processing and automation scripts
