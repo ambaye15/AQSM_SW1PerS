@@ -228,7 +228,7 @@ def run_periodicity_demo():
     X += np.random.normal(scale=0.1, size=X.shape) #Add some noise
 
     period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
-    period = PeriodEstimator.estimate_period(X)
+    period = period_estimator.estimate_period(X)
     
     d = 23
     tau = period / (d + 1)
