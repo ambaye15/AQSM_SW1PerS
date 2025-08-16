@@ -138,7 +138,7 @@ class SW1PerS:
         sampling_rate = self.num_points / (self.end_time - self.start_time)
 
         period_estimator = PeriodEstimator(sampling_rate, num_components, f_min = 0.5, f_max = 2.0, window_size = (self.end_time - self.start_time))
-        period = PeriodEstimator.estimate_period(X_detrended)
+        period = period_estimator.estimate_period(X_detrended)
 
         return period
 
