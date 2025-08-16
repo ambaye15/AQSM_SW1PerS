@@ -10,6 +10,7 @@
 **AQSM_SW1PerS** is a Python package for analyzing repetitive motion patterns using pose estimation and topological data analysis. It was developed to support the classification and analysis of *Stereotypical Motor Movements (SMMs)* observed in individuals with Autism Spectrum Disorder (ASD), but can be applied to any dataset where one aims to quantify and interpret reccurrent patterns in time series or motion in videos. The package provides modules for:
 
 - Motion tracking
+- -Period estimation of $\geq$ 1-variate time series
 - Sliding Windows Embeddings
 - Persistence diagram computation
 - Topological visualization of time series data
@@ -118,6 +119,7 @@ See `notebooks/tutorial.ipynb` for a full walkthrough using the `.pkl` file.
 
 ```python
 from AQSM_SW1PerS.SW1PerS import *
+from AQSM_SW1PerS.utils.period_estimation import *
 from persim import plot_diagrams 
 import matplotlib.pyplot as plt 
 import numpy as np
@@ -131,7 +133,9 @@ y = np.sin(2 * np.pi * t_vals)
 X = np.column_stack((x, y))
 X += np.random.normal(scale=0.1, size=X.shape)
 
-period = estimate_period(X[:, 0], X[:, 1], sampling_rate)
+period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
+period = period_estimator.estimate_period(X)
+
 d = 23
 tau = period / (d + 1)
 
