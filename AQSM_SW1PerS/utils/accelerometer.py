@@ -119,7 +119,6 @@ def getAccelerometerRange(X, a, interpolate_to_fixed_length=False, expected_leng
     t1, t2 = a['start'], a['stop']
     mask = (X[:, 0] >= t1) & (X[:, 0] < t2)
     window = X[mask, :]
-    print(len(window))
     if interpolate_to_fixed_length:
         if window.shape[0] > 1:
             from scipy.interpolate import interp1d
