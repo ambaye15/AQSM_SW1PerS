@@ -71,14 +71,20 @@ def process_folder(folder_path):
   rwrist_scores = results[2]
 
   annotations = extract_annotations(meta_data)
-  
-  X_features = np.column_stack((annotations,torso_scores, lwrist_scores, rwrist_scores))
-
-  PS_df = pd.DataFrame(X_features)
 
   path = Path(folder_path)
   filename_cleaned = path.name
 
+
+  X_features = np.column_stack((annotations,torso_scores, lwrist_scores, rwrist_scores))
+
+  PS_df = pd.DataFrame(
+    X_features,
+    columns=["Annotation", "Torso_PS", "Lwrist_PS", "Rwrist_PS"] )
+  
+  # Insert first column with the file/session name
+  PS_df.insert(0, "Session", filename_cleaned)
+  
   PS_df.to_csv(f'{filename_cleaned}_scores_accelerometer.csv', index=False)
 
 if __name__ == "__main__":
