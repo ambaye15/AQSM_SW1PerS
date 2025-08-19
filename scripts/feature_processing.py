@@ -119,18 +119,18 @@ def process(input_video):
     chest_accel_splines = [CubicSpline(frame_times,chest_accel[:,0]), CubicSpline(frame_times,chest_accel[:,1])]
 
     args_list = [
-        (head_splines, segments),
-        (rw_splines, segments),
-        (lw_splines, segments),
-        (rs_splines, segments),
-        (ls_splines, segments),
-        (chest_splines, segments),
-        (head_accel_splines, segments),
-        (rw_accel_splines, segments),
-        (lw_accel_splines, segments),
-        (rs_accel_splines, segments),
-        (ls_accel_splines, segments),
-        (chest_accel_splines, segments) ]
+        (head_splines, sampled_segments),
+        (rw_splines, sampled_segments),
+        (lw_splines, sampled_segments),
+        (rs_splines, sampled_segments),
+        (ls_splines, sampled_segments),
+        (chest_splines, sampled_segments),
+        (head_accel_splines, sampled_segments),
+        (rw_accel_splines, sampled_segments),
+        (lw_accel_splines, sampled_segments),
+        (rs_accel_splines, sampled_segments),
+        (ls_accel_splines, sampled_segments),
+        (chest_accel_splines, sampled_segments) ]
     
     # Create a pool of workers and map tasks
     with multi.Pool(multi.cpu_count()) as pool:
