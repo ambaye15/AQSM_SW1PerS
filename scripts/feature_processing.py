@@ -150,15 +150,24 @@ def process(input_video):
     lshoulder_scores_accel = results[10]
     chest_scores_accel = results[11]
     
-    X_features_raw = np.column_stack((sampled_segment_labels,head_scores,rwrist_scores,lwrist_scores,rshoulder_scores,lshoulder_scores,chest_scores))
-    X_features_accel = np.column_stack((sampled_segment_labels,head_scores_accel,rwrist_scores_accel,lwrist_scores_accel,rshoulder_scores_accel,lshoulder_scores_accel,chest_scores_accel))
+    X_features = np.column_stack((sampled_segment_labels,
+                                      head_scores,
+                                      rwrist_scores,
+                                      lwrist_scores,
+                                      rshoulder_scores,
+                                      lshoulder_scores, 
+                                      chest_scores, 
+                                      head_scores_accel,
+                                      rwrist_scores_accel,
+                                      lwrist_scores_accel,
+                                      rshoulder_scores_accel,
+                                      lshoulder_scores_accel,
+                                      chest_scores_accel))
 
-    raw_scores_df = pd.DataFrame(X_features_raw)
-    accel_scores_df = pd.DataFrame(X_features_accel)
+    scores_df = pd.DataFrame(X_features)
     
     #Save the scores to csv
-    raw_scores_df.to_csv(f'{filename_cleaned}_scores_position.csv', index=False)
-    accel_scores_df.to_csv(f'{filename_cleaned}_scores_accel.csv', index=False)
+    scores_df.to_csv(f'{filename_cleaned}_scores.csv', index=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a video file.')
