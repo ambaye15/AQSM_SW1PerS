@@ -163,11 +163,15 @@ def process(input_video):
                                       rshoulder_scores_accel,
                                       lshoulder_scores_accel,
                                       chest_scores_accel))
-
-    scores_df = pd.DataFrame(X_features)
+    PS_df = pd.DataFrame(
+        X_features,
+        columns=["Annotation", "Head", "RWrist", "LWrist", "RShoulder", "LShoulder", "Chest", "Head_Accel", "RWrist_Accel", "LWrist_Accel", "RShoulder_Accel", "LShoulder_Accel", "Chest_Accel" ] ) #Must change if using PS10
+      
+      # Insert first column with the file/session name
+    PS_df.insert(0, "Session", filename_cleaned)
     
     #Save the scores to csv
-    scores_df.to_csv(f'{filename_cleaned}_scores.csv', index=False)
+    PS_df.to_csv(f'{filename_cleaned}_scores.csv', index=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a video file.')
