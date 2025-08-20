@@ -36,6 +36,8 @@ def extract_annotations(meta_data):
   return np.vstack(annotations)
   
 def process_folder(folder_path):
+
+  method = 'PS1'
   
   if '001-2010-05-28' in str(folder_path):
     annofile = 'Annotator1Stereotypy.annotation.xlsx'
@@ -58,17 +60,17 @@ def process_folder(folder_path):
   right_wrist_X = get_accel_data(folder_path, right_wrist_file)
 
   args_list = [
-        (torso_X, meta_data),
-        (left_wrist_X, meta_data),
-        (right_wrist_X, meta_data) ]
+        (torso_X, meta_data, method),
+        (left_wrist_X, meta_data, method),
+        (right_wrist_X, meta_data, method) ]
 
   with multi.Pool(multi.cpu_count()) as pool:
         results = pool.map(processAccel, args_list)
 
   # Unpack the results
-  torso_scores = results[0]
-  lwrist_scores = results[1]
-  rwrist_scores = results[2]
+ torso_scores, torso_period = results[0]
+  lwrist_scores, lwrist_period = results[1]
+  rwrist_scores, rwrist_period = results[2]
 
   annotations = extract_annotations(meta_data)
 
@@ -78,9 +80,20 @@ def process_folder(folder_path):
 
   X_features = np.column_stack((annotations,torso_scores, lwrist_scores, rwrist_scores))
 
-  PS_df = pd.DataFrame(
-    X_features,
-    columns=["Annotation", "Torso_PS", "Lwrist_PS", "Rwrist_PS"] )
+  if method == 'PS10':
+    PS_df = pd.DataFrame(
+        X_features,
+        columns = (
+            ["Annotation"] +
+            [f"Torso_{i}" for i in range(1, 11)] +
+            [f"LWrist_{i}" for i in range(1, 11)] +
+            [f"RWrist_{i}" for i in range(1, 11)] +
+            ["Torso_Period", "LWrist_Period", "RWrist_Period"]
+            ) )
+  else:
+    PS_df = pd.DataFrame(
+      X_features,
+      columns=["Annotation", "Torso_PS", "Lwrist_PS", "Rwrist_PS"] )
   
   # Insert first column with the file/session name
   PS_df.insert(0, "Session", filename_cleaned)
