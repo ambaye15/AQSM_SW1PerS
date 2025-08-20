@@ -60,6 +60,8 @@ def subsample_normal_intervals(segments, segment_annotations):
     
 def process(input_video):
 
+    method = 'PS1' #Change to PS10 for better classification accuracy
+
     pkl_file = get_data_path("dataset.pkl")
 
     video_data = open_pickle(pkl_file)
@@ -119,18 +121,18 @@ def process(input_video):
     chest_accel_splines = [CubicSpline(frame_times,chest_accel[:,0]), CubicSpline(frame_times,chest_accel[:,1])]
 
     args_list = [
-        (head_splines, sampled_segments),
-        (rw_splines, sampled_segments),
-        (lw_splines, sampled_segments),
-        (rs_splines, sampled_segments),
-        (ls_splines, sampled_segments),
-        (chest_splines, sampled_segments),
-        (head_accel_splines, sampled_segments),
-        (rw_accel_splines, sampled_segments),
-        (lw_accel_splines, sampled_segments),
-        (rs_accel_splines, sampled_segments),
-        (ls_accel_splines, sampled_segments),
-        (chest_accel_splines, sampled_segments) ]
+        (head_splines, sampled_segments, method),
+        (rw_splines, sampled_segments, method),
+        (lw_splines, sampled_segments, method),
+        (rs_splines, sampled_segments, method),
+        (ls_splines, sampled_segments, method),
+        (chest_splines, sampled_segments, method),
+        (head_accel_splines, sampled_segments, method),
+        (rw_accel_splines, sampled_segments, method),
+        (lw_accel_splines, sampled_segments, method),
+        (rs_accel_splines, sampled_segments, method),
+        (ls_accel_splines, sampled_segments, method),
+        (chest_accel_splines, sampled_segments, method) ]
     
     # Create a pool of workers and map tasks
     with multi.Pool(multi.cpu_count()) as pool:
@@ -163,9 +165,27 @@ def process(input_video):
                                       rshoulder_scores_accel,
                                       lshoulder_scores_accel,
                                       chest_scores_accel))
-    PS_df = pd.DataFrame(
-        X_features,
-        columns=["Annotation", "Head", "RWrist", "LWrist", "RShoulder", "LShoulder", "Chest", "Head_Accel", "RWrist_Accel", "LWrist_Accel", "RShoulder_Accel", "LShoulder_Accel", "Chest_Accel" ] ) #Must change if using PS10
+    if method == 'PS10':
+        PS_df = pd.DataFrame(
+            X_features,
+            columns = (
+                ["Annotation"] +
+                [f"Head_{i}" for i in range(1, 11)] +
+                [f"RWrist_{i}" for i in range(1, 11)] +
+                [f"LWrist_{i}" for i in range(1, 11)] + 
+                [f"RShoulder_{i}" for i in range(1, 11)] +
+                [f"LShoulder_{i}" for i in range(1, 11)] +
+                [f"Chest_{i}" for i in range(1, 11)] +
+                [f"Head_Accel_{i}" for i in range(1, 11)] +
+                [f"RWrist_Accel_{i}" for i in range(1, 11)] +
+                [f"LWrist_Accel_{i}" for i in range(1, 11)] +
+                [f"RShoulder_Accel_{i}" for i in range(1, 11)] +
+                [f"LShoulder_Accel_{i}" for i in range(1, 11)] +
+                [f"Chest_Accel_{i}" for i in range(1, 11)] +))
+    else:
+        PS_df = pd.DataFrame(
+            X_features,
+            columns=["Annotation", "Head", "RWrist", "LWrist", "RShoulder", "LShoulder", "Chest", "Head_Accel", "RWrist_Accel", "LWrist_Accel", "RShoulder_Accel", "LShoulder_Accel", "Chest_Accel" ] ) 
       
       # Insert first column with the file/session name
     PS_df.insert(0, "Session", filename_cleaned)
