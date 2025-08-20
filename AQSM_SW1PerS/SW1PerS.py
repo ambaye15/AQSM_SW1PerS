@@ -107,7 +107,7 @@ def compute_PS(dgm1, method = 'PS1'):
 
 class SW1PerS:
 
-    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47):
+    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47, return_period = False):
         self.start_time = start_time
         self.end_time = end_time
         self.num_points = num_points
@@ -115,6 +115,7 @@ class SW1PerS:
         self.method = method
         self.d = d
         self.prime_coeff = prime_coeff
+        self.return_period = return_period
 
     def _detrend_and_convert(self, spline_funcs):
         
@@ -170,7 +171,10 @@ class SW1PerS:
 
         score = self._1PerS(SW)
 
-        return score
+        if self.return_period:
+            return score, period
+        else:
+            return score
         
 # Section: Main Algorithm
 # ---------------------------
