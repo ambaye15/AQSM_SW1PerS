@@ -45,7 +45,7 @@ def estimate_sampling_rate(timestamps_ms):
 def SW1PerS_alt(accelerometer_X, meta_data, method = 'PS1'):
 
     periodicity_scores = []  
-
+    periods = []
     d = 23
 
     prime_coeff = next_prime(2 * d)
@@ -64,11 +64,12 @@ def SW1PerS_alt(accelerometer_X, meta_data, method = 'PS1'):
     
                 num_points = int(4 * sampling_rate)
     
-                scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
+                scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff, return_period = True)
     
-                score = scoring_pipeline.compute_score(spline_funcs)
+                score, period = scoring_pipeline.compute_score(spline_funcs)
     
                 periodicity_scores.append(score)
+                periods.append(period)
             
         except Exception as e:
             
@@ -76,8 +77,9 @@ def SW1PerS_alt(accelerometer_X, meta_data, method = 'PS1'):
                 periodicity_scores.append(np.zeros(10))
             else:
                 periodicity_scores.append(np.zeros(1))
+            periods.append(4.0)
                 
-    return np.vstack(periodicity_scores)
+    return np.vstack(periodicity_scores), np.vstack(periods)
 
 def processAccel(args):
     '''
