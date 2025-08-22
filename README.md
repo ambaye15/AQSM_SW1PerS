@@ -63,7 +63,7 @@ AQSM_SW1PerS/
 |   ├── paths.py             # Acess contents of 'Dataset' directory from any other directory
 |   ├── period_estimation.py # Tools to estimate period of multivariate time series
 │   └── video_tools.py       # Load annotations, read and write videos from Goodwin et al. (2014)
-classification_tools/  # Model training, evaluation scripts
+classification_tools/        # Model training, evaluation scripts
 notebooks/                   # Demos, tutorials, reproducible figures
 scripts/                     # Batch processing and automation scripts
 tests/                       # Test script to verify installation
