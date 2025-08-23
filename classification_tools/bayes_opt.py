@@ -11,11 +11,11 @@ from sklearn.preprocessing import label_binarize
 
 class BayesianOptimizer:
     def __init__(self, 
-                 n_calls = 100,
-                 n_random_starts = 25,
+                 n_calls = 200,
+                 n_random_starts = 30,
                  method = 'PS1',
                  feature_selection = False,
-                 required_features = None,
+                 required_features = {0, 6, 7, 8},
                  random_state = 42):
 
         self.n_calls = n_calls
@@ -43,9 +43,11 @@ class BayesianOptimizer:
         self.X_train, self.X_val = None, None
         self.y_train, self.y_val = None, None
 
+        self.best_feature_mask, self.best_params = None, None
 
 
-    def construct_feature_mask(self):
+
+    def construct_feature_mask(self, params):
         '''
         Function to construct the feature mask which is used in optimization
         '''
@@ -62,7 +64,7 @@ class BayesianOptimizer:
         
         for i, include in enumerate(feature_mask):
             group_size = self.group_sizes[i]  
-            if include == 1 or i in self.required_feature_groups:  # Always include required groups
+            if include == 1 or i in self.required_features:  # Always include required groups
                 selected_indices.extend(range(start_idx, start_idx + group_size))
             start_idx += group_size  
             
@@ -124,8 +126,12 @@ class BayesianOptimizer:
         if self.feature_selection:
             best_feature_mask = self.construct_feature_mask(best_params)
             best_hyperparams = {k: v for k, v in best_params.items() if not k.startswith("feature_")}
-            return best_hyperparams, best_feature_mask
+            self.best_feature_mask = best_feature_mask
+            self.best_params = best_hyperparams
         else:
-            return best_params
+            self.best_params = best_params
+
+
+
 
            
