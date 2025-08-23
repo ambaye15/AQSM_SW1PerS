@@ -17,18 +17,19 @@ from sklearn.model_selection import LeaveOneGroupOut, StratifiedShuffleSplit
 
 from bayes_opt import *
 
+
+
 class ClassificationExperiments:
     def __init__(self,
                  scores_dir,
                  experiment = 'stratified',
-                 input_modality = 'pose',
+                 input_modality = 'accelerometer',
                  method = 'PS1',
                  binary = True,
                  include_freq = False,
                  optimize = False,
                  load_params = None,
                  optimize_feature_space = False,
-                 return_model = True,
                  random_state = 42):
         """
         Wrapper for classification experiments.
@@ -51,7 +52,7 @@ class ClassificationExperiments:
         self.load_params = load_params
         self.optimize = optimize
         self.optimize_feature_space = optimize_feature_space
-        self.return_model = return_model
+
         self.random_state = random_state
 
         # Placeholders for data and model
@@ -63,12 +64,10 @@ class ClassificationExperiments:
         self.X_train_oversampled, self.y_train_oversampled = None, None
         self.model = None
 
-        #Useful for Visualizations
+        #Useful for visualizations
         self.test_predictions = None
         self.class_names = None
 
-
-        
     def load_data(self):
         data_folder = self.scores_dir
         csv_files = sorted(data_folder.glob("*.csv"))
@@ -288,12 +287,14 @@ class ClassificationExperiments:
             self.y_val = (self.y_val != 0).astype(int)
 
         if self.optimize:
-            bayes_optimizer = BayesianOptimizer(n_calls = 100, n_random_starts = 25, method = self.method)
-            best_params = bayes_optimizer.do_bayes_opt(seelf.X_train, self.y_train, self.X_val, self.y_val)
-            best_feature_mask = self.construct_feature_mask(best_params)
-            params = {k: v for k, v in best_params.items() if not k.startswith("feature_")}
-            self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, best_feature_mask)
-            self.X_test = bayes_optimizer.select_features(self.X_test, best_feature_mask)
+            bayes_optimizer = BayesianOptimizer(n_calls = 100, n_random_starts = 25, method = self.method, feature_selection = self.optimize_feature_space)
+            bayes_optimizer.do_bayes_opt(self.X_train_oversampled, self.y_train_oversampled, self.X_val, self.y_val)
+            params = bayes_optimizer.best_params
+            if self.optimize_feature_space:
+                best_feature_mask = bayes_optimizer.best_feature_mask
+                params = bayes_optimizer.best_params
+                self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, best_feature_mask)
+                self.X_test = bayes_optimizer.select_features(self.X_test, best_feature_mask)
         else:
             params = self.load_params
 
@@ -309,9 +310,9 @@ class ClassificationExperiments:
             class_names = ['None', 'Rock', 'Flap', 'Flap-Rock']
 
         self.test_predictions = test_predictions
+        self.class_names = class_names
         print(classification_report(self.y_test, test_predictions, target_names=class_names))
-        if self.return_model:
-            self.model = model
+        self.model = model
 
     def leave_one_out(self):
         
@@ -396,8 +397,7 @@ class ClassificationExperiments:
                 class_names = ['None', 'Rock', 'Flap', 'Flap-Rock']
 
             print(classification_report(self.y_test, test_predictions, target_names=class_names))
-            if self.return_model:
-                self.model = model
+
             
     def run_classification_experiment(self):
         self.load_data()
@@ -405,8 +405,11 @@ class ClassificationExperiments:
             self.stratified_split()
             self.oversampler()
             self.stratified_set_classification()
-            return self.model
         elif self.experiment == 'LOSO' or self.experiment == 'LOCO':
             self.leave_one_out_classification()
         else:
             raise ValueError(f"Not a valid experiment")
+
+
+
+
