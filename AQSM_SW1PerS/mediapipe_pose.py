@@ -66,6 +66,9 @@ class MP_pose:
         self.min_tracking_confidence = min_tracking_confidence
         self.model_complexity = model_complexity
 
+        self.dims = None
+
+
     def _apply_clahe(self, frame, clip_limit=2.0, tile_grid_size=(8, 8)):
         '''
         Apply CLAHE (Adaptive Histogram Equalization) to enhance image contrast.
@@ -92,12 +95,12 @@ class MP_pose:
         table = np.array([((i / 255.0) ** invGamma) * 255 for i in range(256)]).astype("uint8")
         return cv2.LUT(frame, table)
 
-    def _getNormalizedFrameKeypoint(self, keypoint, dims, xmin, xmax, ymin, ymax):
+    def _getNormalizedFrameLandmark(self, lmrk, dims, xmin, xmax, ymin, ymax):
         '''
-        Normalized keypoint with respect to frame, instead of YOLOv5 bounding box
+        Normalized landmark with respect to frame, instead of YOLOv5 bounding box
         '''
-        frame_width, frame_height = dims
-        x, y = keypoint[0], keypoint[1]
+        frame_width, frame_height = self.dims
+        x, y = lmrk[0], lmrk[1]
         w, h = np.abs(xmax - xmin), np.abs(ymax - ymin)
         x_unnormalized = x * w + xmin
         y_unnormalized = y * h + ymin
@@ -105,8 +108,8 @@ class MP_pose:
         y_frame = np.abs((y_unnormalized - frame_height) / frame_height)
         return x_frame, y_frame
 
-    def _create_kalman_filter(self, fps):
-        dt = 1 / fps  # Time step
+    def _create_kalman_filter(self):
+        dt = 1 / self.fps  # Time step
         
         kf = KalmanFilter(dim_x=8, dim_z=4)
         
@@ -163,17 +166,17 @@ class MP_pose:
         frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         
-        dims = (frame_width,frame_height)
+        self.dims = (frame_width,frame_height)
         
         if self.create_video:
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            out = cv2.VideoWriter(output_video, fourcc, self.fps, (frame_width,frame_height))
+            out = cv2.VideoWriter(output_video, fourcc, self.fps, self.dims)
     
         #Decide what child we need to track for the YOLOv5 model
         cls = getClass(video_path)
         
         #For tracking centroids of current frame and previous frame
-        kf = self._create_kalman_filter(self.fps)
+        kf = self._create_kalman_filter()
     
         data = []
         frame_count = 0
@@ -256,7 +259,7 @@ class MP_pose:
                                 for idx, landmark in enumerate(results.pose_landmarks.landmark):
                                     x, y = landmark.x, landmark.y
                                     #Re-normalize with respect to frame
-                                    x_new, y_new = self._getNormalizedFrameKeypoint([x,y],dims,x_min,x_max,y_min,y_max)
+                                    x_new, y_new = self._getNormalizedFrameLandmark([x,y],x_min,x_max,y_min,y_max)
                                     frame_data[f'joint_{idx}_x'] = x_new
                                     frame_data[f'joint_{idx}_y'] = y_new
                                     frame_data[f'joint_{idx}_visibility'] = landmark.visibility
