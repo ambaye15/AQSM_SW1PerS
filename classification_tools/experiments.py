@@ -30,6 +30,7 @@ class ClassificationExperiments:
                  optimize = False,
                  load_params = None,
                  optimize_feature_space = False,
+                 return_model = True,
                  random_state = 42):
         """
         Wrapper for classification experiments.
@@ -52,6 +53,7 @@ class ClassificationExperiments:
         self.load_params = load_params
         self.optimize = optimize
         self.optimize_feature_space = optimize_feature_space
+        self.return_model = return_model
 
         self.random_state = random_state
 
@@ -67,6 +69,8 @@ class ClassificationExperiments:
         #Useful for visualizations
         self.test_predictions = None
         self.class_names = None
+        self.best_params = None
+        self.best_feature_selection = None
 
     def load_data(self):
         data_folder = self.scores_dir
@@ -295,6 +299,9 @@ class ClassificationExperiments:
                 params = bayes_optimizer.best_params
                 self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, best_feature_mask)
                 self.X_test = bayes_optimizer.select_features(self.X_test, best_feature_mask)
+                self.best_params = params
+                self.best_feature_selection = best_feature_mask
+                
         else:
             params = self.load_params
 
@@ -410,6 +417,8 @@ class ClassificationExperiments:
             self.leave_one_out_classification()
         else:
             raise ValueError(f"Not a valid experiment")
+
+
 
 
 
