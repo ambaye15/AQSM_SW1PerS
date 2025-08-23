@@ -12,8 +12,17 @@
 module load anaconda3/2022.05
 source activate pytorch_env
 
-FILENAME=$(ls Vids/*.avi | sed -n "$((SLURM_ARRAY_TASK_ID + 1))p")
+# Get all bottom-level folders inside data/Study*
+folder_list=($(find data/Study* -mindepth 1 -maxdepth 1 -type d | sort))
 
-echo "Processing file: $FILENAME"
+# Bounds check
+if [ "$SLURM_ARRAY_TASK_ID" -ge "${#folder_list[@]}" ]; then
+    echo "SLURM_ARRAY_TASK_ID=$SLURM_ARRAY_TASK_ID out of bounds"
+    exit 1
+fi
 
-python feature_processing.py --input "$FILENAME" 
+# Get the folder for this task
+FOLDER="${folder_list[$SLURM_ARRAY_TASK_ID]}"
+echo "Processing folder: $FOLDER"
+
+python feature_processing.py --input "$FOLDER" 
