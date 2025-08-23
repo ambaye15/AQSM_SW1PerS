@@ -107,7 +107,7 @@ def compute_PS(dgm1, method = 'PS1'):
 
 class SW1PerS:
 
-    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47, return_period = False):
+    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47):
         self.start_time = start_time
         self.end_time = end_time
         self.num_points = num_points
@@ -115,7 +115,11 @@ class SW1PerS:
         self.method = method
         self.d = d
         self.prime_coeff = prime_coeff
-        self.return_period = return_period
+
+        self.X_detrended = None
+        self.num_components = None
+        self.period = None
+        self.periodicity_score = None
 
     def _detrend_and_convert(self, spline_funcs):
         
@@ -123,32 +127,30 @@ class SW1PerS:
             signal.detrend(f(self.time_values)) for f in spline_funcs
         ]
 
-        X_detrended = np.column_stack(detrended_signals)
+        self.X_detrended = np.column_stack(detrended_signals)
 
         component_splines = [
             CubicSpline(self.time_values, detrended_signals[i]) for i in range(len(detrended_signals))
         ]
 
-        num_components = int(len(component_splines))
+        self.num_components = int(len(component_splines))
         
-        return X_detrended, component_splines, num_components
+        return component_splines
         
         
-    def _estimate_period(self, X_detrended, num_components):
+    def _estimate_period(self):
 
         sampling_rate = self.num_points / (self.end_time - self.start_time)
 
-        period_estimator = PeriodEstimator(sampling_rate, num_components, f_min = 0.5, f_max = 2.0, window_size = (self.end_time - self.start_time))
-        period = period_estimator.estimate_period(X_detrended)
-
-        return period
-
+        period_estimator = PeriodEstimator(sampling_rate, self.num_components, f_min = 0.5, f_max = 2.0, window_size = (self.end_time - self.start_time))
+        period = period_estimator.estimate_period(self.X_detrended)
+        self.period = period
     
-    def _sliding_windows(self, component_splines, num_components, period):
+    def _sliding_windows(self, component_splines):
         
-        tau = period / (self.d + 1)    
+        tau = self.period / (self.d + 1)    
 
-        SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, num_components)
+        SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, self.num_components)
 
         return SW
 
@@ -157,24 +159,15 @@ class SW1PerS:
         result = ripser(SW, coeff = self.prime_coeff, maxdim = 1) 
         dgm1 = np.array(result['dgms'][1])
 
-        score = compute_PS(dgm1, method = self.method)
-
-        return score
+        self.periodicity_score = compute_PS(dgm1, method = self.method)
 
     def compute_score(self, spline_funcs):
 
-        X_detrended, component_splines, num_components = self._detrend_and_convert(spline_funcs)
+        component_splines = self._detrend_and_convert(spline_funcs)
+        self._estimate_period()
+        SW = self._sliding_windows(component_splines)
+        self._1PerS(SW)
 
-        period = self._estimate_period(X_detrended, num_components)
-
-        SW = self._sliding_windows(component_splines, num_components, period)
-
-        score = self._1PerS(SW)
-
-        if self.return_period:
-            return score, period
-        else:
-            return score
         
 # Section: Main Algorithm
 # ---------------------------
@@ -201,9 +194,11 @@ def getFeatures(spline_funcs, segments, num_points = 1000, method = 'PS10'):
         try:
             scoring_pipeline = SW1PerS(start_time = np.min(segment), end_time = np.max(segment), num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
 
-            score = scoring_pipeline.compute_score(spline_funcs)
+            scoring_pipeline.compute_score(spline_funcs)
             
-            periodicity_scores.append(score)
+            periodicity_scores.append(scoring_pipeline.periodicity_score)
+
+            #If higher temporal rate videos are available, you may also extract period as frequency-domain feature
             
         except Exception as e:
             if method == 'PS10':
