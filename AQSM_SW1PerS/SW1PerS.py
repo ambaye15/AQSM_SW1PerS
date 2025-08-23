@@ -116,6 +116,7 @@ class SW1PerS:
         self.d = d
         self.prime_coeff = prime_coeff
 
+        self.SW = None
         self.X_detrended = None
         self.num_components = None
         self.period = None
@@ -150,13 +151,11 @@ class SW1PerS:
         
         tau = self.period / (self.d + 1)    
 
-        SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, self.num_components)
+        self.SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, self.num_components)
 
-        return SW
-
-    def _1PerS(self, SW):
+    def _1PerS(self):
         
-        result = ripser(SW, coeff = self.prime_coeff, maxdim = 1) 
+        result = ripser(self.SW, coeff = self.prime_coeff, maxdim = 1) 
         dgm1 = np.array(result['dgms'][1])
 
         self.periodicity_score = compute_PS(dgm1, method = self.method)
@@ -166,7 +165,7 @@ class SW1PerS:
         component_splines = self._detrend_and_convert(spline_funcs)
         self._estimate_period()
         SW = self._sliding_windows(component_splines)
-        self._1PerS(SW)
+        self._1PerS()
 
         
 # Section: Main Algorithm
