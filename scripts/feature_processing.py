@@ -16,6 +16,7 @@ import pandas as pd
 import argparse
 import os
 from pathlib import Path
+import re
 import numpy as np
 from AQSM_SW1PerS.utils.data_processing import *
 from AQSM_SW1PerS.SW1PerS import *
@@ -23,8 +24,14 @@ from AQSM_SW1PerS.utils.paths import get_data_path
 
 
 '''
-IMPORTANT - Ensure that 'Videos' directory is contained in the same directory as this script. Otherwise change bash script to read from a .txt file for ease
+IMPORTANT - Ensure that 'data' directory is contained in the same directory as this script. Otherwise change bash script to read from a .txt file for ease
 '''
+def processFeatures(args):
+    '''
+    Tool for multiprocessing getFeatures because computations across sensors are easily parallelizable 
+    '''
+    return getFeatures(*args)
+    
 
 def subsample_normal_intervals(segments, segment_annotations):
     # Split segments into positive and negative sets
@@ -56,21 +63,10 @@ def subsample_normal_intervals(segments, segment_annotations):
     sampled_segment_labels = positive_segments_labels + negative_segments_labels
 
     return sampled_segments, np.vstack(sampled_segment_labels)
-
     
-def process(input_video):
-
-    method = 'PS1' #Change to PS10 for better classification accuracy
-
-    pkl_file = get_data_path("dataset.pkl")
-
-    video_data = open_pickle(pkl_file)
-
-    path = Path(input_video)
-    filename_cleaned = path.stem  
     
-    video_entry = next((entry for entry in video_data if entry['name'] == filename_cleaned), None)
-        
+def extract_features(video_entry, method = 'PS10'):
+    
     fps, frame_times, segments, segment_annotations = segment_video(video_entry, 4) 
 
     sampled_segments, sampled_segment_labels = subsample_normal_intervals(segments, segment_annotations)
@@ -121,18 +117,18 @@ def process(input_video):
     chest_accel_splines = [CubicSpline(frame_times,chest_accel[:,0]), CubicSpline(frame_times,chest_accel[:,1])]
 
     args_list = [
-        (head_splines, sampled_segments, method),
-        (rw_splines, sampled_segments, method),
-        (lw_splines, sampled_segments, method),
-        (rs_splines, sampled_segments, method),
-        (ls_splines, sampled_segments, method),
-        (chest_splines, sampled_segments, method),
-        (head_accel_splines, sampled_segments, method),
-        (rw_accel_splines, sampled_segments, method),
-        (lw_accel_splines, sampled_segments, method),
-        (rs_accel_splines, sampled_segments, method),
-        (ls_accel_splines, sampled_segments, method),
-        (chest_accel_splines, sampled_segments, method) ]
+        (head_splines, sampled_segments, 1000, method),
+        (rw_splines, sampled_segments, 1000, method),
+        (lw_splines, sampled_segments,1000, method),
+        (rs_splines, sampled_segments, 1000, method),
+        (ls_splines, sampled_segments, 1000, method),
+        (chest_splines, sampled_segments, 1000, method),
+        (head_accel_splines, sampled_segments, 1000, method),
+        (rw_accel_splines, sampled_segments, 1000, method),
+        (lw_accel_splines, sampled_segments, 1000, method),
+        (rs_accel_splines, sampled_segments,1000, method),
+        (ls_accel_splines, sampled_segments, 1000, method),
+        (chest_accel_splines, sampled_segments, 1000, method) ]
     
     # Create a pool of workers and map tasks
     with multi.Pool(multi.cpu_count()) as pool:
@@ -165,6 +161,40 @@ def process(input_video):
                                       rshoulder_scores_accel,
                                       lshoulder_scores_accel,
                                       chest_scores_accel))
+                                      
+    return X_features
+    
+    
+def process(folder_path):
+    
+    method = 'PS10'
+    pkl_file = get_data_path("dataset.pkl")
+
+    video_data = open_pickle(pkl_file)
+
+    path = Path(folder_path)
+
+    filename_cleaned = path.stem  # e.g. "URI-004-01-17-08" or "004-2010-05-11"
+    
+    if filename_cleaned.startswith("URI-"):   # Study1 case
+        base = filename_cleaned.replace("URI-", "")
+        matches = [entry for entry in video_data 
+                   if re.match(rf"{base}(_\d+)?_study1$", entry['name'])]
+    else:  # Study2 case
+        base = filename_cleaned
+        matches = [entry for entry in video_data 
+                   if entry['name'] == f"{base}_study2"]
+    
+    video_entry = matches[0] if matches else None
+        
+    X_features = extract_features(video_entry, method)
+    
+    if filename_cleaned == "URI-004-01-17-08":
+        video_entry_2 = video_data[15]
+        X_features_2 = extract_features(video_entry_2, method)
+        X_features = np.vstack((X_features, X_features_2))
+        
+    
     if method == 'PS10':
         PS_df = pd.DataFrame(
             X_features,
@@ -181,21 +211,22 @@ def process(input_video):
                 [f"LWrist_Accel_{i}" for i in range(1, 11)] +
                 [f"RShoulder_Accel_{i}" for i in range(1, 11)] +
                 [f"LShoulder_Accel_{i}" for i in range(1, 11)] +
-                [f"Chest_Accel_{i}" for i in range(1, 11)] +))
+                [f"Chest_Accel_{i}" for i in range(1, 11)]))
     else:
         PS_df = pd.DataFrame(
             X_features,
             columns=["Annotation", "Head", "RWrist", "LWrist", "RShoulder", "LShoulder", "Chest", "Head_Accel", "RWrist_Accel", "LWrist_Accel", "RShoulder_Accel", "LShoulder_Accel", "Chest_Accel" ] ) 
-      
       # Insert first column with the file/session name
     PS_df.insert(0, "Session", filename_cleaned)
     
     #Save the scores to csv
-    PS_df.to_csv(f'{filename_cleaned}_scores.csv', index=False)
+    PS_df.to_csv(f'{filename_cleaned}_pose_scores.csv', index=False)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a video file.')
     parser.add_argument('--input', required=True, help='Path to the input video file')
     args = parser.parse_args()
-    process_Feats(args.input)
-   
+    process(args.input)
+    
+    
