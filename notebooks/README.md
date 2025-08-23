@@ -15,16 +15,6 @@ This notebook is ideal for first-time users or reviewers who want a reproducible
 
 ---
 
-## `Visualizations.ipynb`
-
-A focused notebook for exploring the visual analysis tools included in the package:
-
-- Plotting UMAP-reduced TDA feature space
-
-Use this notebook to generate figures or visually inspect processed data.
-
----
-
 ## `accelerometer_tutorial.ipynb`
 
 A comprehensive, step-by-step tutorial of the `Sw1PerS` algorithm applied to 3-axis acceleromter data:
@@ -33,13 +23,6 @@ A comprehensive, step-by-step tutorial of the `Sw1PerS` algorithm applied to 3-a
 2) **Data Analysis** - Walkthrough of data analysis pipline using accelerometer data
 
 ---
-
-## `trained_models.ipynb`
-
-A notebook that shows how modules from `Classification_experiments` can be used. Shows visuals for all three experiments perfomred
-
-- **Experiment 1** - Confusion Matrices, PR and Feature Importance visuals
-- **Experiment 2 and 3** -  Confusion Matrices and PR visuals
 
 ## `create_concept_video.ipynb`
 
