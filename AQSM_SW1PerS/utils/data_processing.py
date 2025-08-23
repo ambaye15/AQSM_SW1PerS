@@ -101,7 +101,7 @@ def segment_video(entry, segment_size):
 
 def getChest(p1, p2, p3):
     '''
-    Estimates the chest position as the average of three keypoints. This is a good stabalizer point
+    Estimates the chest position as the average of three landmarks. This is a good stabalizer point
     '''
     x1, y1 = p1[:, 0], p1[:, 1]
     x2, y2 = p2[:, 0], p2[:, 1]
@@ -122,10 +122,10 @@ def compute_joint_angle(x1, y1, x2, y2, x3, y3):
     angle = np.arccos(np.clip(np.dot(v1, v2) / (norm_v1 * norm_v2), -1.0, 1.0))
     return np.degrees(angle)
 
-def filter_visibility(keypoints, frame_times, keypoint_index, do_wrists=False,
+def filter_visibility(keypoints, frame_times, landmark_index, do_wrists=False,
                       wrist_index=None, elbow_index=None, visibility_threshold=0.3):
     '''
-    Filters out frames with low visibility keypoints.
+    Filters out frames with low visibility landmarks.
     '''
     if do_wrists:
         wv = []
@@ -134,7 +134,7 @@ def filter_visibility(keypoints, frame_times, keypoint_index, do_wrists=False,
             raise ValueError("wrist_index and elbow_index must be provided when do_wrists=True.")
         wrist_bad_frames = []
         elbow_bad_frames = []
-        for idx, frame in enumerate(keypoints):
+        for idx, frame in enumerate(landmarks):
             wv.append(frame[wrist_index][2])
             ev.append(frame[elbow_index][2])
             if frame[wrist_index][2] < visibility_threshold:
@@ -144,8 +144,8 @@ def filter_visibility(keypoints, frame_times, keypoint_index, do_wrists=False,
         return wrist_bad_frames, elbow_bad_frames
     else:
         bad_frames = []
-        for idx, frame in enumerate(keypoints):
-            if frame[keypoint_index][2] < visibility_threshold:
+        for idx, frame in enumerate(landmarks):
+            if frame[landmark_index][2] < visibility_threshold:
                 bad_frames.append(frame_times[idx])
         return bad_frames
 
@@ -213,24 +213,24 @@ def interprolate_missing_frames(df, col1, col2, method="cubic"):
     return df
 
 
-def extract_keypoints(entry, keypoint_index, frame_times, fps, do_wrists=False,
+def extract_landmarks(entry, landmark_index, frame_times, fps, do_wrists=False,
                       elbow_index=None, shoulder_index=None):
     '''
-    Extracts and cleans keypoint (x, y) data.
+    Extracts and cleans landmark (x, y) data.
     '''
 
-    keypoints = entry['keypoints']
+    landmarks = entry['keypoints']
     
     if do_wrists:
         
         # Get bad visibility frames for wrist and elbow
-        wrist_bad_frames, elbow_bad_frames = filter_visibility(keypoints, frame_times, keypoint_index, do_wrists=True, wrist_index=keypoint_index, elbow_index=elbow_index, visibility_threshold=0.2)
+        wrist_bad_frames, elbow_bad_frames = filter_visibility(landmarks, frame_times, landmark_index, do_wrists=True, wrist_index=landmark_index, elbow_index=elbow_index, visibility_threshold=0.2)
         # Extract (x,y) data for wrist, elbow, and shoulder from each frame.
-        keypoint_array = [[[x, y] for x, y, _ in frame] for frame in keypoints]
+        landmark_array = [[[x, y] for x, y, _ in frame] for frame in landmarks]
         wrist_points, elbow_points, shoulder_points = [], [], []
-        for frame in keypoint_array:
-            if (keypoint_index < len(frame) and elbow_index < len(frame) and shoulder_index < len(frame)):
-                wrist_points.append(frame[keypoint_index])
+        for frame in landmark_array:
+            if (landmark_index < len(frame) and elbow_index < len(frame) and shoulder_index < len(frame)):
+                wrist_points.append(frame[landmark_index])
                 elbow_points.append(frame[elbow_index])
                 shoulder_points.append(frame[shoulder_index])
             else:
@@ -286,13 +286,13 @@ def extract_keypoints(entry, keypoint_index, frame_times, fps, do_wrists=False,
         return df[["X_Wrist", "Y_Wrist"]].to_numpy()
     
     else:
-        # For non-wrist processing, filter visibility and extract the desired keypoint.
-        bad_visibility_frames = filter_visibility(keypoints, frame_times, keypoint_index)
-        keypoint_array = [[[x, y] for x, y, _ in frame] for frame in keypoints]
+        # For non-wrist processing, filter visibility and extract the desired landmark.
+        bad_visibility_frames = filter_visibility(landmarks, frame_times, landmark_index)
+        landmark_array = [[[x, y] for x, y, _ in frame] for frame in landmarks]
         extracted = []
-        for frame in keypoint_array:
-            if keypoint_index < len(frame):
-                extracted.append(frame[keypoint_index])
+        for frame in landmark_array:
+            if landmark_index < len(frame):
+                extracted.append(frame[landmark_index])
             else:
                 continue
         extracted = np.vstack(extracted)
