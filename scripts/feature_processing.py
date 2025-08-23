@@ -71,11 +71,11 @@ def extract_features(video_entry, method = 'PS10'):
 
     sampled_segments, sampled_segment_labels = subsample_normal_intervals(segments, segment_annotations)
 
-    head = extract_keypoints(video_entry, 0, frame_times, fps)
-    lshoulder = extract_keypoints(video_entry, 11, frame_times, fps)
-    rshoulder = extract_keypoints(video_entry, 12, frame_times, fps)
-    rwrist = extract_keypoints(video_entry, 16, frame_times, fps, do_wrists=True, elbow_index=14, shoulder_index=12)
-    lwrist = extract_keypoints(video_entry, 15, frame_times, fps, do_wrists=True, elbow_index=13, shoulder_index=11)
+    head = extract_landmarks(video_entry, 0, frame_times, fps)
+    lshoulder = extract_landmarks(video_entry, 11, frame_times, fps)
+    rshoulder = extract_landmarks(video_entry, 12, frame_times, fps)
+    rwrist = extract_landmarks(video_entry, 16, frame_times, fps, do_wrists=True, elbow_index=14, shoulder_index=12)
+    lwrist = extract_landmarks(video_entry, 15, frame_times, fps, do_wrists=True, elbow_index=13, shoulder_index=11)
     
     chest = getChest(head, lshoulder, rshoulder)
     
