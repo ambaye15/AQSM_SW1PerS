@@ -376,8 +376,9 @@ class ClassificationExperiments:
                 self.y_val = (self.y_val != 0).astype(int)
         
             if self.optimize:
-                bayes_optimizer = BayesianOptimizer(n_calls = 5, n_random_starts = 1, method = self.method, feature_selection = self.optimize_feature_space)
-                params = bayes_optimizer.do_bayes_opt(self.X_train_oversampled, self.y_train_oversampled, self.X_val, self.y_val)
+                bayes_optimizer = BayesianOptimizer(n_calls = 100, n_random_starts = 25, method = self.method, feature_selection = self.optimize_feature_space)
+                bayes_optimizer.do_bayes_opt(self.X_train_oversampled, self.y_train_oversampled, self.X_val, self.y_val)
+                params = bayes_optimizer.best_params
             else:
                 params = self.load_params
 
