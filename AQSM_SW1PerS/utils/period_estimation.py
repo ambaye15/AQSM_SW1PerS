@@ -72,25 +72,30 @@ class PeriodEstimator:
             dft = np.fft.fft(F)
             magnitude_spectrum = np.abs(dft)
             frequencies = np.fft.fftfreq(len(F), 1/self.fs)
-
-            band_mask = self.band_cutoff(frequencies)   # should return boolean mask or indices
-            
-            band_limited_spectrum = np.zeros_like(magnitude_spectrum)
-            band_limited_spectrum[band_mask] = magnitude_spectrum[band_mask]
-            
-            pk = self.find_prominent_peaks(band_limited_spectrum, 0, 0) 
-            if pk is None or len(pk) == 0:
-                pk, _ = find_peaks(band_limited_spectrum)
-                pk = [pk[np.argmax(band_limited_spectrum[pk])]] if len(pk) > 0 else []
-                
+            pk = self.find_prominent_peaks(magnitude_spectrum, 0, 0) 
             peak_center = frequencies[pk][0]
             period = np.abs((1/peak_center))
+            
+            if period > self.window_size / 2: #Cutoff Period, we would need at least 2 oscillations to detect periodic motion
+                epsilon = 1e-10  
+                
+                frequencies = np.where(frequencies == 0, epsilon, frequencies)
+                cutoff_period = self.window_size / 2
+                periods = np.abs(1/frequencies)
+                
+                # Apply cutoff to magnitude spectrum
+                idx = np.where(periods < cutoff_period) 
+                magnitude_spectrum = magnitude_spectrum[idx]
+                frequencies = frequencies[idx]
+                pk = self.find_prominent_peaks(magnitude_spectrum, 0, 0) 
+            
+                peak_center = frequencies[pk][0]
+                period = np.abs((1/peak_center))
 
         except:
             period = np.nan
             
         return period
-    
 
     #Section 2: Cases when time series has >= 3 components
 
