@@ -32,18 +32,7 @@ class ClassificationExperiments:
                  optimize_feature_space = False,
                  return_model = True,
                  random_state = 42):
-        """
-        Wrapper for classification experiments.
-
-        Params:
-            scores_dir (str): Path to precomputed features or scores.
-            experiment (str): Experiment performed ('stratified', 'LOSO', 'LOCO')
-            input_modality (str): Data type ('accelerometer', 'pose')
-            method (str): Periodicity Score method ('PS1', 'PS10')
-            binary (bool): Binary vs multi-class classification.
-            include_freq (bool): Whether to include frequency-domain features.
-            random_state (int): Reproducibility seed.
-        """
+     
         self.scores_dir = scores_dir
         self.experiment = experiment
         self.input_modality = input_modality
