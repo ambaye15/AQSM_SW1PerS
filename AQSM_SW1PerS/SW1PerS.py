@@ -137,7 +137,7 @@ class SW1PerS:
             CubicSpline(self.time_values, detrended_signals[i]) for i in range(len(detrended_signals))
         ]
 
-        self.num_components = int(len(component_splines))
+        self.num_components = int(len(self.component_splines))
                 
         
     def _estimate_period(self):
