@@ -69,7 +69,7 @@ scripts/                     # Batch processing and automation scripts
 tests/                       # Test script to verify installation
 docs/                        # In depth instreuction of dataset
 Dataset/                     # Must download
-Visualizations/              # Figures used in paper and interactive .html file
+Visualizations/              # Directory to save images
 ```
 
 ---
