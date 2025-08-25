@@ -298,17 +298,16 @@ class ClassificationExperiments:
             bayes_optimizer.do_bayes_opt(self.X_train_oversampled, self.y_train_oversampled, self.X_val, self.y_val)
             params = bayes_optimizer.best_params
             if self.optimize_feature_space:
-                best_feature_mask = bayes_optimizer.best_feature_mask
-                params = bayes_optimizer.best_params
-                self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, best_feature_mask)
-                self.X_test = bayes_optimizer.select_features(self.X_test, best_feature_mask)
-                self.best_params = params
-                self.best_feature_selection = best_feature_mask
-                
+                self.best_feature_selection = bayes_optimizer.best_feature_mask
+                self.best_params = bayes_optimizer.best_params
+                self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, self.best_feature_selection)
+                self.X_test = bayes_optimizer.select_features(self.X_test, self.best_feature_selection)
+            else:
+                self.best_params = bayes_optimizer.best_params
         else:
-            params = self.load_params
+            self.best_params = self.load_params
 
-        model = RandomForestClassifier(**params, n_jobs=-1, random_state=42)
+        model = RandomForestClassifier(**self.best_params, n_jobs=-1, random_state=42)
 
         model.fit(self.X_train_oversampled, self.y_train_oversampled)
 
@@ -388,11 +387,17 @@ class ClassificationExperiments:
             if self.optimize:
                 bayes_optimizer = BayesianOptimizer(n_calls = 100, n_random_starts = 25, method = self.method, feature_selection = self.optimize_feature_space)
                 bayes_optimizer.do_bayes_opt(self.X_train_oversampled, self.y_train_oversampled, self.X_val, self.y_val)
-                params = bayes_optimizer.best_params
+                if self.optimize_feature_space:
+                    self.best_feature_selection = bayes_optimizer.best_feature_mask
+                    self.best_params = bayes_optimizer.best_params
+                    self.X_train_oversampled = bayes_optimizer.select_features(self.X_train_oversampled, self.best_feature_selection)
+                    self.X_test = bayes_optimizer.select_features(self.X_test, self.best_feature_selection)
+                else:
+                    self.best_params = bayes_optimizer.best_params
             else:
-                params = self.load_params
+                self.best_params = self.load_params
 
-            model = RandomForestClassifier(**params, n_jobs=-1, random_state=42)
+            model = RandomForestClassifier(**self.best_params, n_jobs=-1, random_state=42)
 
             model.fit(self.X_train_oversampled, self.y_train_oversampled)
             
