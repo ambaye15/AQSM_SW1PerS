@@ -117,6 +117,7 @@ class SW1PerS:
         self.prime_coeff = prime_coeff
 
         #Useful for other analyses or visualizations
+        self.component_splines = None
         self.diagram = None
         self.SW = None
         self.X_detrended = None
@@ -132,14 +133,12 @@ class SW1PerS:
 
         self.X_detrended = np.column_stack(detrended_signals)
 
-        component_splines = [
+        self.component_splines = [
             CubicSpline(self.time_values, detrended_signals[i]) for i in range(len(detrended_signals))
         ]
 
         self.num_components = int(len(component_splines))
-        
-        return component_splines
-        
+                
         
     def _estimate_period(self):
 
@@ -149,11 +148,11 @@ class SW1PerS:
         period = period_estimator.estimate_period(self.X_detrended)
         self.period = period
     
-    def _sliding_windows(self, component_splines):
+    def _sliding_windows(self):
         
         tau = self.period / (self.d + 1)    
 
-        self.SW = SW_cloud_nD(component_splines, self.time_values, tau, self.d, 300, self.num_components)
+        self.SW = SW_cloud_nD(self.component_splines, self.time_values, tau, self.d, 300, self.num_components)
 
     def _1PerS(self):
         
@@ -164,9 +163,9 @@ class SW1PerS:
 
     def compute_score(self, spline_funcs):
 
-        component_splines = self._detrend_and_convert(spline_funcs)
+        self._detrend_and_convert(spline_funcs)
         self._estimate_period()
-        SW = self._sliding_windows(component_splines)
+        self._sliding_windows()
         self._1PerS()
 
         
