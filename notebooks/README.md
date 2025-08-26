@@ -3,6 +3,11 @@
 This folder contains interactive Jupyter notebooks that demonstrate the core functionality and applications of the `AQSM_SW1PerS` package.
 
 ---
+## `ClassificationExperiments.ipynb`
+
+Notebook showing how experiments done in the paper were performed, and how to recreate figures.
+
+---
 
 ## `Tutorial.ipynb`
 
@@ -17,7 +22,7 @@ This notebook is ideal for first-time users or reviewers who want a reproducible
 
 ## `accelerometer_tutorial.ipynb`
 
-A comprehensive, step-by-step tutorial of the `Sw1PerS` algorithm applied to 3-axis acceleromter data:
+A tutorial of the `Sw1PerS` algorithm applied to 3-axis acceleromter data:
 
 1) **Data Extraction** - Walkthrough that shows how accelerometer data is extracted from `data` directory
 2) **Data Analysis** - Walkthrough of data analysis pipline using accelerometer data
