@@ -122,7 +122,7 @@ def compute_joint_angle(x1, y1, x2, y2, x3, y3):
     angle = np.arccos(np.clip(np.dot(v1, v2) / (norm_v1 * norm_v2), -1.0, 1.0))
     return np.degrees(angle)
 
-def filter_visibility(keypoints, frame_times, landmark_index, do_wrists=False,
+def filter_visibility(landmarks, frame_times, landmark_index, do_wrists=False,
                       wrist_index=None, elbow_index=None, visibility_threshold=0.3):
     '''
     Filters out frames with low visibility landmarks.
