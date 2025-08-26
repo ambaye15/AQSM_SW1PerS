@@ -16,12 +16,13 @@ class TestPeriodicityMethods(unittest.TestCase):
         d = 23
         scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = d, prime_coeff = next_prime(2 * d))
         scoring_pipeline.compute_score(spline_funcs)
-
+        self.scoring_pipeline = scoring_pipeline
+        
     def test_estimate_period(self):
-        self.assertTrue(0.9 < scoring_pipeline.period < 1.1)
+        self.assertTrue(0.9 < self.scoring_pipeline.period < 1.1)
 
     def test_compute_PS_range(self):
-        self.assertTrue(0.5 <= scoring_pipeline.periodicity_score <= 1)
+        self.assertTrue(0.5 <= self.scoring_pipeline.periodicity_score <= 1)
 
 if __name__ == "__main__":
     unittest.main()
