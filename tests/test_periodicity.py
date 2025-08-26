@@ -13,8 +13,8 @@ class TestPeriodicityMethods(unittest.TestCase):
         self.X = np.column_stack((self.x, self.y))
         self.X += np.random.normal(scale=0.1, size=self.X.shape)
         spline_funcs = [CubicSpline(self.t_vals, self.X[:, 0]), CubicSpline(self.t_vals, self.X[:, 1])]
-        
-        scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = next_prime(2 * d))
+        d = 23
+        scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = d, prime_coeff = next_prime(2 * d))
         scoring_pipeline.compute_score(spline_funcs)
 
     def test_estimate_period(self):
