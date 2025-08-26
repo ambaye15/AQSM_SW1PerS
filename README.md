@@ -67,7 +67,7 @@ classification_tools/        # Model training, evaluation scripts
 notebooks/                   # Demos, tutorials, reproducible figures
 scripts/                     # Batch processing and automation scripts
 tests/                       # Test script to verify installation
-docs/                        # In depth instreuction of dataset
+docs/                        # In depth instruction of dataset
 Dataset/                     # Must download
 Visualizations/              # Directory to save images
 ```
