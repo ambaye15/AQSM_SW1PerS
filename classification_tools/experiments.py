@@ -29,7 +29,7 @@ from itertools import compress
 from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import LeaveOneGroupOut, StratifiedShuffleSplit
 
-from bayes_opt import *
+from classification_tools.bayes_opt import *
 
 
 
