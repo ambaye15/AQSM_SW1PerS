@@ -15,10 +15,6 @@ affiliations:
     index: 1
 date: 27 August 2025
 bibliography: paper.bib
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 
@@ -60,7 +56,6 @@ The package is structured around a small set of core classes and utilities:
 - **Classification Utilities**: Provides integration with *scikit-learn* for supervised learning on topological feature representations. Supports common tasks such as classifying movement types, evaluating model performance, and conducting hyperparameter optimization. Multiple classification schemes are available, enabling researchers to compare approaches and identify the most effective models for their datasets.
 - **Visualization**: Provides plotting functions for persistence diagrams, feature distributions, and classifier outputs to aid interpretation and communication of results.
 - **Batch Processing**: Includes shell scripts that support processing multiple files at once, enabling efficient large-scale analyses. This functionality streamlines the workflow when working with datasets containing many videos or sensor recordings, reducing manual overhead and improving reproducibility.
-
 
 Together, these components allow users to progress from **raw multimodal motion data** → **topological features** → **classification or applications** with minimal overhead.
 
@@ -112,5 +107,5 @@ plt.tight_layout()
 plt.show()
 ```
 
-![Example workflow: (a) a noisy circular trajectory represented as a 2D time series, (b) the corresponding persistence diagram showing a prominent 1-dimensional loop, and (c) the periodicity score presented as a single value derived from the diagram. Together, these demonstrate how AQSM-SW1PerS extracts interpretable topological features that capture recurrent structure in time series data.](Visualizations/demo_time_series.png)
+![Example workflow: (a) a noisy circular trajectory represented as a 2D time series, (b) the corresponding persistence diagram showing a prominent 1-dimensional loop, and (c) the periodicity score presented as a single value derived from the diagram. Together, these demonstrate how AQSM-SW1PerS extracts interpretable topological features that capture recurrent structure in time series data.](../Visualizations/demo_time_series.png)
 
