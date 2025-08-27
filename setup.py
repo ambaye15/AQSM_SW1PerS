@@ -3,8 +3,11 @@ from setuptools import setup, find_packages
 setup(
     name="AQSM_SW1PerS",
     version="0.1.0",
-    description="Analysis and TDA pipeline for repetitive movement detection",
-    author="Austin MBaye",
+    description="TDA pipeline for quantification of recurrence in multimodal time series data",
+    license = { file = "LICENSE" }
+    authors = [
+      { name = "Austin MBaye", email = "mbaye.au@northeastern.edu" }
+    ]
     packages=find_packages(),
     install_requires=[
         "numpy",
