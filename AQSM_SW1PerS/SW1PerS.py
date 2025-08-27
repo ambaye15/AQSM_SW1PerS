@@ -219,44 +219,35 @@ def processFeatures(args):
 def run_periodicity_demo():
     import matplotlib.pyplot as plt
     
-    t_vals = np.linspace(0, 4, 150)
-    sampling_rate = 150 / 4
+    t_vals = np.linspace(0, 4, 1000)
     x = np.cos(2 * np.pi * t_vals)
     y = np.sin(2 * np.pi *t_vals)
     X = np.column_stack((x, y))
     X += np.random.normal(scale=0.1, size=X.shape) #Add some noise
-
-    period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
-    period = period_estimator.estimate_period(X)
-    
-    d = 23
-    tau = period / (d + 1)
     spline_x = CubicSpline(t_vals, X[:,0])
     spline_y = CubicSpline(t_vals, X[:,1])
-    spline = [spline_x, spline_y]
-
-    SW = SW_cloud_nD(spline, t_vals, tau, d, 300, 2)
-
+    spline_funcs = [spline_x, spline_y]
+    d = 23
     prime_coeff = next_prime(2 * d)
-    results = ripser(SW, coeff = prime_coeff, maxdim = 1) 
-    diagrams = results['dgms']
-    dgm1 = np.array(diagrams[1])
-    score = compute_PS(dgm1, method = 'PS1')
+    method = 'PS1'
+    
+    scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
+    scoring_pipeline.compute_score(spline_funcs)
 
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 
-    ax1.plot(t_vals,X[:, 0],color='r',label = 'X')
-    ax1.plot(t_vals,X[:, 1],color='g',label = 'Y')
+    ax1.plot(t_vals, X[:, 0],color='r',label = 'X')
+    ax1.plot(t_vals, X[:, 1],color='g',label = 'Y')
     ax1.set_title("Generated 2D Time Series")
     ax1.set_yticks([])
     ax1.axis("equal")
 
-    plot_diagrams(diagrams, plot_only=[1], xy_range=[0, 2, 0, 2], ax = ax2)
+    plot_diagrams(scoring_pipeline.diagram, plot_only=[1], xy_range=[0, 2, 0, 2], ax = ax2)
     ax2.set_xticks([])
     ax2.set_yticks([])
     ax2.set_title(fr'Persistence Diagram')
     
-    ax3.bar(range(1), score, alpha=0.5)
+    ax3.bar(range(1), scoring_pipeline.periodicity_score, alpha=0.5)
     ax3.set_title(fr'Periodicity Score')
     ax3.set_xlim(-0.5, 0.5)
     ax3.set_ylim(0, 1)
