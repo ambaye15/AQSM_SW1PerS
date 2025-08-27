@@ -20,7 +20,7 @@ bibliography: paper.bib
 
 # Summary
 
-**AQSM_SW1PerS** provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and computer-vision–derived pose trajectories. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
+Automated Quantification of Stereotypical Motor Movements (**AQSM_SW1PerS**) provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and computer-vision–derived pose trajectories. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
 
 The software is motivated by the challenge of characterizing **stereotypical motor movements (SMM)** in autism, where video data is often low-resolution and sensor data may be noisy or sparse. By leveraging mathematically grounded topological features, AQSM-SW1PerS offers an interpretable and generalizable framework for motion quantification that is accessible to researchers across various fields.
 
