@@ -11,7 +11,7 @@ authors:
     orcid: 
     affiliation: 1
 affiliations:
-  - name: Department of Mathematics, Northeastern University
+  - name: Department of Mathematics, Northeastern University, Boston, MA, USA
     index: 1
 date: 27 August 2025
 bibliography: paper.bib
@@ -106,6 +106,8 @@ ax3.set_xlim(-0.5, 0.5); ax3.set_ylim(0, 1); ax3.set_xticks([])
 plt.tight_layout()
 plt.show()
 ```
-
 ![Example workflow: (a) a noisy circular trajectory represented as a 2D time series, (b) the corresponding persistence diagram showing a prominent 1-dimensional loop, and (c) the periodicity score presented as a single value derived from the diagram. Together, these demonstrate how AQSM-SW1PerS extracts interpretable topological features that capture recurrent structure in time series data.](../Visualizations/demo_time_series.png)
+
+
+
 
