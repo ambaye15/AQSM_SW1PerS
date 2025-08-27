@@ -236,6 +236,14 @@ def explained_variance_plots(X_features):
     plt.grid(True)
     plt.show()
 
+def umap_reduction(X_features, Feature_extraction_class):
+    umap_reducer = umap.UMAP(n_components = 3, random_state = 42, n_jobs = -1)
+    X_umap = umap_reducer.fit_transform(X_features)
+    df_umap = pd.DataFrame(X_umap, columns = ['UMAP1', 'UMAP2', 'UMAP3'])
+    df_umap['PersonID'] = Feature_extraction_class.person_ids
+    df_umap['Annotations'] = Feature_extraction_class.annotations
+    return df_umap
+
 
 def plot_interactive(df_umap_tda, color_by_anno=True, save_html=False, output_name = 'anno_tda'):
 
