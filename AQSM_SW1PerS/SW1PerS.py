@@ -218,8 +218,12 @@ def processFeatures(args):
 #Example signal for demonstration
 def run_periodicity_demo():
     import matplotlib.pyplot as plt
+    num_points = 1000
+    d = 23
+    prime_coeff = next_prime(2 * d)
+    method = 'PS1'
     
-    t_vals = np.linspace(0, 4, 1000)
+    t_vals = np.linspace(0, 4, num_points)
     x = np.cos(2 * np.pi * t_vals)
     y = np.sin(2 * np.pi *t_vals)
     X = np.column_stack((x, y))
@@ -227,9 +231,6 @@ def run_periodicity_demo():
     spline_x = CubicSpline(t_vals, X[:,0])
     spline_y = CubicSpline(t_vals, X[:,1])
     spline_funcs = [spline_x, spline_y]
-    d = 23
-    prime_coeff = next_prime(2 * d)
-    method = 'PS1'
     
     scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
     scoring_pipeline.compute_score(spline_funcs)
