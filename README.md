@@ -87,40 +87,49 @@ Here is a simple demo of a periodic 2D signal with its persistence diagram and p
 
 ```python
 from AQSM_SW1PerS.SW1PerS import *
-from AQSM_SW1PerS.utils.period_estimation import *
 from persim import plot_diagrams
 import matplotlib.pyplot as plt
 import numpy as np
 
-t_vals = np.linspace(0, 4, 150)
-sampling_rate = 150 / 4
-x = np.cos(2 * np.pi * t_vals)
-y = np.sin(2 * np.pi * t_vals)
-X = np.column_stack((x, y)) + np.random.normal(scale=0.1, size=(150, 2))
-
-period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
-period = period_estimator.estimate_period(X)
-
+num_points = 150
 d = 23
-tau = period / (d + 1)
-spline = [CubicSpline(t_vals, X[:, 0]), CubicSpline(t_vals, X[:, 1])]
-SW = SW_cloud_nD(spline, t_vals, tau, d, 300, 2)
+prime_coeff = next_prime(2 * d)
+method = 'PS1'
 
-diagrams = ripser(SW, coeff=next_prime(2 * d), maxdim=1)['dgms']
-score = compute_PS(np.array(diagrams[1]), method='PS1')
+t_vals = np.linspace(0, 4, num_points)
+x = np.cos(2 * np.pi * t_vals)
+y = np.sin(2 * np.pi *t_vals)
+X = np.column_stack((x, y))
+X += np.random.normal(scale=0.1, size=X.shape) #Add some noise
+spline_x = CubicSpline(t_vals, X[:,0])
+spline_y = CubicSpline(t_vals, X[:,1])
+spline_funcs = [spline_x, spline_y]
+
+scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
+scoring_pipeline.compute_score(spline_funcs)
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
-ax1.plot(t_vals, X[:, 0], label='X'); ax1.plot(t_vals, X[:, 1], label='Y')
-ax1.set_title("2D Time Series"); ax1.set_yticks([]); ax1.axis("equal")
 
-plot_diagrams(diagrams, plot_only=[1], ax=ax2)
-ax2.set_title("Persistence Diagram"); ax2.set_xticks([]); ax2.set_yticks([])
+ax1.plot(t_vals, X[:, 0],color='r',label = 'X')
+ax1.plot(t_vals, X[:, 1],color='g',label = 'Y')
+ax1.set_title("Generated 2D Time Series")
+ax1.set_yticks([])
+ax1.axis("equal")
 
-ax3.bar(range(1), score, alpha=0.5)
-ax3.set_title("Periodicity Score"); ax3.set_ylim(0, 1); ax3.set_xticks([])
+plot_diagrams(scoring_pipeline.diagram, plot_only=[1], xy_range=[0, 2, 0, 2], ax = ax2)
+ax2.set_xticks([])
+ax2.set_yticks([])
+ax2.set_title(fr'Persistence Diagram')
+
+ax3.bar(range(1), scoring_pipeline.periodicity_score, alpha=0.5)
+ax3.set_title(fr'Periodicity Score')
+ax3.set_xlim(-0.5, 0.5)
+ax3.set_ylim(0, 1)
+ax3.set_xticks([])
 
 plt.tight_layout()
-plt.show()
+plt.show()    
+
 ```
 
 ![Time Series Demo](Visualizations/demo_time_series.png)
