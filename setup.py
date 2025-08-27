@@ -4,17 +4,16 @@ setup(
     name="AQSM_SW1PerS",
     version="0.1.0",
     description="TDA pipeline for quantification of recurrence in multimodal time series data",
-    license = { file = "LICENSE" }
-    authors = [
-      { name = "Austin MBaye", email = "mbaye.au@northeastern.edu" }
-    ]
+    license="Apache-2.0",  
+    author="Austin MBaye",
+    author_email="mbaye.au@northeastern.edu",
     packages=find_packages(),
     install_requires=[
         "numpy",
         "pandas",
         "scikit-learn",
         "matplotlib",
-        "ripser", 
+        "ripser",
         "scipy",
         "seaborn",
         "persim",
