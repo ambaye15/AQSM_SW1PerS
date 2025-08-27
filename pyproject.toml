@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools >= 61.0", "build", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AQSM_SW1PerS"
+version = "0.1.0"
+description = "TDA pipeline for quantification of recurrence in multimodal time series data"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Austin MBaye", email = "mbaye.au@northeastern.edu" }
+]
+maintainers = [
+  { name = "Austin MBaye", email = "mbaye.au@northeastern.edu" }
+]
+requires-python = ">=3.7"
+dependencies = [
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "matplotlib",
+  "ripser",
+  "scipy",
+  "seaborn",
+  "persim",
+  "opencv-python",
+  "mediapipe",
+  "filterpy",
+  "sympy",
+  "imbalanced-learn",
+  "scikit-optimize",
+  "joblib",
+  "tqdm",
+  "PyYAML",
+  "umap-learn",
+]
