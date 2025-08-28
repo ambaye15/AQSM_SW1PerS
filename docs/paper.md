@@ -118,5 +118,9 @@ plt.show()
 ![Example workflow: (a) a noisy circular trajectory represented as a 2D time series, (b) the corresponding persistence diagram showing a prominent 1-dimensional loop, and (c) the periodicity score presented as a single value derived from the diagram. Together, these demonstrate how AQSM-SW1PerS extracts interpretable topological features that capture recurrent structure in time series data.](../Visualizations/demo_time_series.png)
 
 
+# Acknowledgements
 
+The National Science Foundation partially supported Austin A. MBaye and Jose A. Perea through CAREER award #DMS-2415445.
+
+# References
 
