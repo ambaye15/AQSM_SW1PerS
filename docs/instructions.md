@@ -190,12 +190,10 @@ Inside each session folder you can find:
              <PROPERTIES ANNOTATION_SET="Annotator1Stereotypy" ... />
            </ANNOTATION>
          </DATA>
-    ``.xlsx​`` ​files are converted from ``​.xml``​ files, so user should be able to find the corresponding column name with the node name described above. ``​.csv​`` ​files have a header row that describes the meaning of each column.
+    ``.xlsx​`` ​files are converted from ``​.xml``​ files, so user should be able to find the corresponding column name with the node name described above. ``​.csv​`` ​files have a header row that describes the meaning of each column. Experiments in the paper only used​ Annotator1​ offline annotations
 
       
    
-
-
 ### `dataset.pkl`
 
 The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the following:
