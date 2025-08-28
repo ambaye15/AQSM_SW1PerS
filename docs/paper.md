@@ -3,12 +3,12 @@ title: "AQSM_SW1PerS: A Topological Data Analysis Pipeline for Quantifying Recur
 tags:
   - Python
   - Topological Data Analysis
+  - Pose Estimation
   - Persistent Homology
-  - Motion Analysis
-  - Time Series
+  - Time Series Analysis
 authors:
-  - name: Austin Amadou MBaye
-    orcid: 
+  - name: Austin A. MBaye
+    orcid: 0009-0006-8907-8593
     affiliation: 1
 affiliations:
   - name: Department of Mathematics, Northeastern University, Boston, MA, USA
@@ -22,8 +22,8 @@ bibliography: paper.bib
 
 Automated Quantification of Stereotypical Motor Movements (**AQSM_SW1PerS**) provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and computer-vision–derived pose trajectories. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
 
-The software is motivated by the challenge of characterizing **stereotypical motor movements (SMM)** in autism, where video data is often low-resolution and sensor data may be noisy or sparse. By leveraging mathematically grounded topological features, AQSM-SW1PerS offers an interpretable and generalizable framework for motion quantification that is accessible to researchers across various fields.
-
+The software is motivated by the challenge of characterizing **stereotypical motor movements (SMM)** in autism, where video data is often low-resolution and sensor data may be noisy or sparse. By leveraging mathematically grounded topological features, AQSM-SW1PerS offers an interpretable and generalizable framework for motion quantification that is accessible to researchers across various fields. This pipeline can transform human movement in raw video data into time series, map those series into geometric shapes through sliding-window embeddings, and finally analyze their structure with persistent homology to produce interpretable feature representations.
+ 
 # Statement of Need
 
 Quantitative analysis of repetitive movement is essential in autism research, biomechanics, and behavioral neuroscience. Deep learning methods have shown strong performance but often require large, high-quality datasets and lack interpretability. Researchers and clinicians increasingly seek transparent, reproducible approaches that can handle noisy or multimodal data.
