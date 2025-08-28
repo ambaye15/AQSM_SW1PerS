@@ -194,7 +194,7 @@ Inside each session folder you can find:
         </ANNOTATION>
       </DATA>
 
-    ```.xlsx​ ​files are converted from ```​.xml​ files, so user should be able to find the corresponding column name with the node name described above. ```​.csv​ ​files have a header row that describes the meaning of each column.
+    ``.xlsx​`` ​files are converted from ``​.xml``​ files, so user should be able to find the corresponding column name with the node name described above. ``​.csv​`` ​files have a header row that describes the meaning of each column.
 
       
    
