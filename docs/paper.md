@@ -22,7 +22,7 @@ affiliations:
   - name: Department of Mathematics and Computer Science, Ursinus College, Collegeville, PA, USA
     index: 3
 date: 27 August 2025
-bibliography: ../docs/paper.bib
+bibliography: paper.bib
 ---
 
 # Summary
