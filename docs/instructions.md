@@ -159,6 +159,46 @@ Inside each session folder you can find:
    - Files with the pattern:  
      - `Annotation*Intervals.xlsx`  
      are used specifically for 001-2010-05-28 due to legacy reasons
+   c) **Annotation data format (`*.annotation.xml`)**
+
+   - Annotated activity labels are encoded in a human and computer readable XML file. This is stored in the Annotation subdirectory inside the session folder. Some datasets may be labeled by more than one annotator using more than one category or set. Each file uses the XML format. Annotations provide time-stamped activity labels aligned to the raw accelerometer data and provide useful timestamps to write videos.
+   
+   - **Annotation node**
+     - `<ANNOTATION GUID="...">`  
+       - **Label (`<LABEL>`)**  
+         - `"Good Data"` (always present → defines usable session span)  
+         - Other labels: `"Rock"`, `"Flap"`, `"Flap-Rock"` (SMM)  
+       - **Start/Stop times**  
+         - `<START_DT>` and `<STOP_DT>`  
+         - date-time nodes receive values in the form [YEAR]-[MO]-[DY] [HR]:[MI]:[SE].[MSe]. Define the start and stop times of a given **Label**
+       - **Ratings (`<RATINGS>`)**  
+         - One or more `<RATING>` entries  
+         - Attributes: `TIMESTAMP`, `VALUE` (state flag), `METARATING` (e.g., intensity or certainty)  
+       - **Properties (`<PROPERTIES>`)**  
+         - Metadata: annotation set, creation, last modification time  
+
+
+      #### Example (simplified)
+      
+      ```xml
+      <DATA DATASET="My Dataset">
+        <ANNOTATION GUID="0ee995dc-...">
+          <LABEL>Good Data</LABEL>
+          <START_DT>2010-05-25 10:04:32.966</START_DT>
+          <STOP_DT>2010-05-25 10:21:07.984</STOP_DT>
+          <RATINGS>
+            <RATING TIMESTAMP="2010-05-25 10:04:32.966" VALUE="1" METARATING="3"/>
+            <RATING TIMESTAMP="2010-05-25 10:21:07.984" VALUE="0" METARATING="3"/>
+          </RATINGS>
+          <PROPERTIES ANNOTATION_SET="Annotator1Stereotypy" ... />
+        </ANNOTATION>
+      </DATA>
+
+    ```.xlsx​ ​files are converted from ```​.xml​ files, so user should be able to find the corresponding column name with the node name described above. ```​.csv​ ​files have a header row that describes the meaning of each column.
+
+      
+   
+
 
 ### `dataset.pkl`
 
