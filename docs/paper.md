@@ -27,9 +27,9 @@ bibliography: paper.bib
 
 # Summary
 
-Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring (**AQSM_SW1PerS**) provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and MediaPipe pose estimation–derived trajectories '[@mediapipe_pose]'. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
+Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring (**AQSM_SW1PerS**) provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and MediaPipe pose estimation–derived trajectories `lugaresi2019mediapipe`. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
 
-The software is motivated by the challenge of characterizing **stereotypical motor movements (SMM)** in autism, where video data is often low-resolution and sensor data may be noisy or sparse. By leveraging mathematically grounded topological features, AQSM-SW1PerS offers an interpretable and generalizable framework for motion quantification that is accessible to researchers across various fields. This pipeline can transform human movement in raw video data into time series, map those series into geometric shapes through sliding-window embeddings '[@article]', and finally analyze their structure with persistent homology to produce interpretable feature representations.
+The software is motivated by the challenge of characterizing **stereotypical motor movements (SMM)** in autism, where video data is often low-resolution and sensor data may be noisy or sparse. By leveraging mathematically grounded topological features, AQSM-SW1PerS offers an interpretable and generalizable framework for motion quantification that is accessible to researchers across various fields. This pipeline can transform human movement in raw video data into time series, map those series into geometric shapes through sliding-window embeddings `@perea2015sw1pers`, and finally analyze their structure with persistent homology to produce interpretable feature representations.
  
 # Statement of Need
 
@@ -45,7 +45,7 @@ This fills a gap between persistent homology libraries and domain-specific appli
 
 # State of the Field
 
-Several mature libraries exist for computing persistent homology, including *Ripser* [@Bauer2021Ripser], *GUDHI* [@gudhi], and *Giotto-TDA* [@giotto-tda]. These packages provide efficient implementations of topological algorithms but primarily function as backends. They do not provide an integrated workflow for interpretable, low-dimensional motion quantification or feature extraction tailored to time series analysis.
+Several mature libraries exist for computing persistent homology [@bauer2021ripser; @gudhi2023manual; @tauzin2021giottotda]. These packages provide efficient implementations of topological algorithms but primarily function as backends. They do not provide an integrated workflow for interpretable, low-dimensional motion quantification or feature extraction tailored to time series analysis.
 
 **AQSM_SW1PerS** builds upon these foundations by providing an end-to-end pipeline that:
 
