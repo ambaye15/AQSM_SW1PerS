@@ -196,7 +196,7 @@ Inside each session folder you can find:
    
 ### `dataset.pkl`
 
-The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the following:
+The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [@goodwin2014]. Each entry of the `.pkl` file contains the following:
 
 - `keypoints`: (x, y, visibility) landmark (also known as keypoint) coordinates  
 - `annotations`: Frame-wise SMM behavior labels (0–3)
@@ -205,7 +205,7 @@ The `.pkl` file contains pose estimation tracking data extracted from MediaPipe�
     -  2 - Flapping
     -  3 - Combination of Flapping and Rocking
 - `fps`, `frame_count`, `duration` - proivdes the fps, total number of frames and duration of the video
-- `name` - Unique identifier for each entry, structured as (participant-date\_study).
+- `name` - Unique identifier for each entry, structured as (**participant-date\_study** as in the `data/` directory).
 
 This `.pkl` file contains all necessary de-identifiable data for the analysis, while allowing room for further modifications or new ideas using the raw MediaPipe landmark data.
 
@@ -222,6 +222,8 @@ Contains `.csv` files for each particiapnt and session with TDA-derived periodic
 -`Landmark/Sensor_n`: TDA-derived periodicity score for the n-th most persistent $H_1$ point for a given pose landmark or sensor.
 -`Sensor_Period`: Estimated period of an accelerometer sensor (Accelerometer data only). May add if one has acess to high-temporal rate video data.
 -`PersonID`: Unique particiapnt # (e.g. 001 -> 1, 002 -> 2, etc.)
+
+All Jupyter notebooks and code provide an interpretable and easy-to-follow pipeline to replicate all experiments done in the paper.
 
 ---
 
