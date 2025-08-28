@@ -108,8 +108,8 @@ Inside each session folder you can find:
 | Study type        | Study 1                                | Study 2                                |
 |-------------------|-----------------------------------------|-----------------------------------------|
 | **Session name**  | `URI-00X-MM-DD-YY`                     | `00X-YYYY-MM-DD`                        |
-| **Raw data files**<br>(in `.csv`) | `MITes_01_RawCorrectedData_Trunk.RAW_DATA.csv` <br> `MITes_08_RawCorrectedData_Left-wrist.RAW_DATA.csv` <br> `MITes_11_RawCorrectedData_Right-wrist.RAW_DATA.csv` <br> `Wocket_00_RawCorrectedData_Right-Wrist.csv` <br> `Wocket_01_RawCorrectedData_Left-Wrist.csv` <br> `Wocket_02_RawCorrectedData_Torso.csv` | *(same structure as Study 1)* |
-| **Annotation files**<br>(in `.xlsx`, `.xml`) | `Annotator1Stereotypy.annotation.*` <br> `Phone.annotation.*` <br> `AnnotationPhoneIntervals.xlsx` <br> `AnnotationVideo1Intervals.xlsx` <br> `AnnotationVideo2Intervals.xlsx` | `Annotator1Stereotypy.annotation.*` <br> `Annotator2Stereotypy.annotation.*` <br> `Phone.annotation.*` |
+| **Raw data files**<br>(in `.csv`) | `MITes_01_RawCorrectedData_Trunk.RAW_DATA.csv` <br> `MITes_08_RawCorrectedData_Left-wrist.RAW_DATA.csv` <br> `MITes_11_RawCorrectedData_Right-wrist.RAW_DATA.csv` | `Wocket_00_RawCorrectedData_Right-Wrist.csv` <br> `Wocket_01_RawCorrectedData_Left-Wrist.csv` <br> `Wocket_02_RawCorrectedData_Torso.csv` |
+| **Annotation files**<br>(in `.xlsx`, `.xml`) | `Annotator1Stereotypy.annotation.*` <br> `Phone.annotation.*` <br> |  `AnnotationPhoneIntervals.xlsx` <br> `AnnotationVideo1Intervals.xlsx` <br> `AnnotationVideo2Intervals.xlsx` <br> `Annotator1Stereotypy.annotation.*` <br> `Annotator2Stereotypy.annotation.*` <br> `Phone.annotation.*` |
 
 1. **Raw data files**  
    - Stored in `.csv` format.  
