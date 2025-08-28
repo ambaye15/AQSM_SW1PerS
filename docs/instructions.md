@@ -1,5 +1,5 @@
 
-# AQSM_SW1PerS: Instructions for Installation and Use
+# AQSM-SW1PerS: Instructions for Installation and Use
 
 **Author: Austin MBaye** 
 
@@ -7,7 +7,7 @@
 
 ## Overview
 
-**AQSM_SW1PerS** is a Python package for analyzing repetitive motion patterns using pose estimation and topological data analysis. It was originally developed to support the classification and analysis of *Stereotypical Motor Movements (SMMs)* observed in individuals with Autism Spectrum Disorder (ASD), but can be applied to any dataset where one aims to quantify and interpret reccurrent patterns in time series or motion in videos. The package provides modules for:
+**AQSM-SW1PerS** is a Python package for analyzing repetitive motion patterns using pose estimation and topological data analysis. It was originally developed to support the classification and analysis of *Stereotypical Motor Movements (SMMs)* observed in individuals with Autism Spectrum Disorder (ASD), but can be applied to any dataset where one aims to quantify and interpret reccurrent patterns in time series or motion in videos. The package provides modules for:
 
 - Motion tracking via Pose Estimation
 - Period estimation of $\geq$ 1-variable time series
@@ -196,7 +196,7 @@ Inside each session folder you can find:
    
 ### `dataset.pkl`
 
-The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [@goodwin2014]. Each entry of the `.pkl` file contains the following:
+The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model [@lugaresi2019mediapipe; @blaze], along with additional metadata for each video in publicly available data from [@goodwin2014]. Each entry of the `.pkl` file contains the following:
 
 - `keypoints`: (x, y, visibility) landmark (also known as keypoint) coordinates  
 - `annotations`: Frame-wise SMM behavior labels (0–3)
@@ -231,3 +231,5 @@ All Jupyter notebooks and code provide an interpretable and easy-to-follow pipel
 
 Check the GitHub repository for further documentation, examples, and updates:  
  [https://github.com/ambaye15/AQSM_SW1PerS](https://github.com/ambaye15/AQSM_SW1PerS)
+
+## Refrences
