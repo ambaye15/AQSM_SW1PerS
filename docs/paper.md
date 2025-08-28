@@ -57,7 +57,7 @@ The package is structured around a small set of core classes and utilities:
 - **Visualization**: Provides plotting functions for persistence diagrams, feature distributions, and classifier outputs to aid interpretation and communication of results.
 - **Batch Processing**: Includes shell scripts that support processing multiple files at once, enabling efficient large-scale analyses. This functionality streamlines the workflow when working with datasets containing many videos or sensor recordings, reducing manual overhead and improving reproducibility.
 
-Together, these components allow users to progress from **raw multimodal motion data** → **topological features** → **classification or applications** with minimal overhead.
+Together, these components allow users to progress from **raw multimodal/multivariate motion data** → **topological features** → **classification or applications** with minimal overhead.
 
 To illustrate the workflow, we generate a noisy circular trajectory and analyze it with `SW1PerS`. The time series is embedded into a high-dimensional point cloud via sliding windows, and persistent homology is computed with *Ripser*. The resulting persistence diagram highlights a 1-dimensional loop corresponding to the underlying periodicity of the signal, which is then summarized into a single periodicity score ($PS_1$). The code snippet below reproduces this example, and the outputs are shown in Figure&nbsp;1.
 
