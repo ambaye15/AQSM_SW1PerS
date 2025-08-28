@@ -10,7 +10,7 @@ authors:
   - name: Austin A. MBaye
     orcid: 0009-0006-8907-8593
     affiliation: 1
-  -name: Jose A. Perea
+  - name: Jose A. Perea
     affiliation: "1, 2"
   - name: Christopher J. Tralie
     affiliation: 3
@@ -19,11 +19,12 @@ affiliations:
     index: 1
   - name: Khoury College of Computer Sciences, Northeastern University, Boston, MA, USA
     index: 2
-  - name: Department of Mathematics and Computer Sciences, Ursinus College, Collegeville, PA, USA
+  - name: Department of Mathematics and Computer Science, Ursinus College, Collegeville, PA, USA
     index: 3
 date: 27 August 2025
 bibliography: paper.bib
 ---
+
 
 
 # Summary
