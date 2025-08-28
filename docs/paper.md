@@ -25,8 +25,6 @@ date: 27 August 2025
 bibliography: paper.bib
 ---
 
-
-
 # Summary
 
 Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring (**AQSM_SW1PerS**) provides an open-source pipeline for quantifying recurrent motion behaviors from multimodal and multivariate time series data, including 3-axis accelerometer signals and MediaPipe pose estimation–derived trajectories [@mediapipe_pose]. The package integrates topological data analysis with mutimodal and multivariate time series data to extract interpretable topological features that capture periodicity and recurrence in motion. These features can be directly applied in classification, clustering, and longitudinal analyses.
