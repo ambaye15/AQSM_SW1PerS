@@ -13,13 +13,13 @@
 - Period estimation of $\geq$ 1-variable time series
 - Sliding Windows Embeddings
 - Persistence diagram computation
-- Topological visualization of time series data
+- Classification tasks
 
 ---
 
 ## System Requirements
 
-- Python 3.11 or higher  
+- Python 3.10 or higher  
 - PyTorch 2.1.0  
 - CUDA 11.8  
 - Recommended: virtual environment (`venv` or `conda`)  
@@ -60,7 +60,7 @@ source activate pytorch_env
 conda install jupyterlab -y
 pip install torch torchvision torchaudio
 ```
-The HPC allowed easier access to GPU partitions for YOLOv5 inference. However, this was also easy to run on laptop or PC with a GPU.
+The HPC allowed easier access to GPU partitions for YOLOv5 inference. However, this was also easy to run on laptop or PC with a GPU and a virtual environment.
 ---
 
 To verify correct installation and behavior, run the included unit tests:
@@ -73,8 +73,8 @@ python -m unittest tests/test_periodicity.py
 
 - `AQSM_SW1PerS/`: Core package with analysis and processing modules. 
 - `classification_tools/`: Code for training and optimizing models.  
-- `notebooks/`: Usage tutorials and visualization demos.
-- `Dataset/`: (Optional) Preprocessed data, YOLO model results, periodicity scores. NOTE- You must download this seperatley given this link: 
+- `notebooks/`: Usage tutorials and visualizations.
+- `Dataset/`: (**Must Download**) Preprocessed data, YOLO model results, periodicity scores. You must download this seperatley given this link: 
 
 ---
 
@@ -82,7 +82,7 @@ python -m unittest tests/test_periodicity.py
 
 ### `dataset.pkl`
 
-The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the exact following:
+The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the following:
 
 - `keypoints`: (x, y, visibility) landmark (also known as keypoint) coordinates  
 - `annotations`: Frame-wise SMM behavior labels (0–3)
@@ -91,9 +91,9 @@ The `.pkl` file contains pose estimation tracking data extracted from MediaPipe�
     -  2 - Flapping
     -  3 - Combination of Flapping and Rocking
 - `fps`, `frame_count`, `duration` - proivdes the fps, total number of frames and duration of the video
-- `name` - Unique identifier for each entry, structured as (child-date\_study).
+- `name` - Unique identifier for each entry, structured as (participant-date\_study).
 
-This `.pkl` file contains all necessary pre-processing data for the analysis, while allowing room for further modifications or new ideas using the raw MediaPipe landmark data.
+This `.pkl` file contains all necessary de-identifiable data for the analysis, while allowing room for further modifications or new ideas using the raw MediaPipe landmark data.
 
 ### `YOLOv5l/`
 
@@ -103,72 +103,11 @@ Trained YOLOv5l model weights and figures.
 
 Contains `.csv` files for each particiapnt and session with TDA-derived periodicity scores (and period estimations for accelerometer data) across 4-second windows. Each row includes:
 
--`Session`: Format - (URI-00*-date) or (00* - date).
--`Annotation `: Behavior annotation for each 4-second time window.
+-`Session`: Format - (URI-00*-date) or (00*-date).
+-`Annotation `: Behavior annotation lables for each 4-second time window.
 -`Landmark/Sensor_n`: TDA-derived periodicity score for the n-th most persistent $H_1$ point for a given pose landmark or sensor.
--`Sensor_Period`: Estimated period of an accelerometer sensor (Accelerometer data only).
+-`Sensor_Period`: Estimated period of an accelerometer sensor (Accelerometer data only). May add if one has acess to high-temporal rate video data.
 -`PersonID`: Unique particiapnt # (e.g. 001 -> 1, 002 -> 2, etc.)
-
----
-
-## Basic Usage
-
-See `notebooks/Tutorial.ipynb` for a full walkthrough using the `.pkl` file.
-
-### Quick Demo
-
-```python
-from AQSM_SW1PerS.SW1PerS import *
-from AQSM_SW1PerS.utils.period_estimation import *
-from persim import plot_diagrams 
-import matplotlib.pyplot as plt 
-import numpy as np
-from scipy.interpolate import CubicSpline
-from ripser import ripser
-
-t_vals = np.linspace(0, 4, 150)
-sampling_rate = 150 / 4
-x = np.cos(2 * np.pi * t_vals)
-y = np.sin(2 * np.pi * t_vals)
-X = np.column_stack((x, y))
-X += np.random.normal(scale=0.1, size=X.shape)
-
-period_estimator = PeriodEstimator(sampling_rate, num_components = 2, f_min = 0.5, f_max = 2.0, window_size = 4.0)
-period = period_estimator.estimate_period(X)
-
-d = 23
-tau = period / (d + 1)
-
-spline_x = CubicSpline(t_vals, X[:, 0])
-spline_y = CubicSpline(t_vals, X[:, 1])
-spline = [spline_x, spline_y]
-
-SW = SW_cloud_nD(spline, t_vals, tau, d, 300, 2)
-results = ripser(SW, coeff=next_prime(2 * d), maxdim=1)
-diagrams = results['dgms']
-score = compute_PS(np.array(diagrams[1]), method='PS1')
-
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
-ax1.plot(t_vals, X[:, 0], color='r', label='X')
-ax1.plot(t_vals, X[:, 1], color='g', label='Y')
-ax1.set_title("Generated 2D Time Series")
-ax1.set_yticks([])
-ax1.axis("equal")
-
-plot_diagrams(diagrams, plot_only=[1], xy_range=[0, 2, 0, 2], ax=ax2)
-ax2.set_xticks([])
-ax2.set_yticks([])
-ax2.set_title("Persistence Diagram")
-
-ax3.bar(range(1), score, alpha=0.5)
-ax3.set_title("Periodicity Score")
-ax3.set_xlim(-0.5, 0.5)
-ax3.set_ylim(0, 1)
-ax3.set_xticks([])
-
-plt.tight_layout()
-plt.show()
-```
 
 ---
 
