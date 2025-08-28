@@ -80,6 +80,86 @@ python -m unittest tests/test_periodicity.py
 
 ## Data Overview
 
+### `data/`
+
+**Goodwin’s paper in UbiComp ’14**  
+Matthew S. Goodwin, Marzieh Haghighi, Qu Tang, Murat Akcakaya, Deniz Erdogmus, and Stephen Intille.  
+2014. *Moving towards a real-time system for automatically recognizing stereotypical motor movements in individuals on the autism spectrum using wireless accelerometry.*  
+In *Proceedings of the 2014 ACM International Joint Conference on Pervasive and Ubiquitous Computing (UbiComp '14)*.  
+ACM, New York, NY, USA, 861–872.  
+DOI: [10.1145/2632048.2632096](http://doi.acm.org/10.1145/2632048.2632096)
+
+**data directory download:**  
+Available at: [Bitbucket Repository](https://bitbucket.org/mhealthresearchgroup/stereotypypublicdataset-sourcecodes/download)
+
+Contains the raw accelerometer data and annotation files. Study 1 and Study 2 sessions were collected 2–3 years apart.
+
+| Participant ID | Study 1 Sessions                          | Study 2 Sessions                          |
+|----------------|-------------------------------------------|-------------------------------------------|
+| 1              | URI-001-01-18-08 <br> URI-001-01-25-08    | 001-2010-05-25 <br> 001-2010-05-28 <br> 001-2010-06-01 |
+| 2              | URI-002-01-18-08 <br> URI-002-01-24-08    | 002-2010-06-04 <br> 002-2011-06-02        |
+| 3              | URI-003-01-18-08 <br> URI-003-02-08-08    | 003-2010-05-07 <br> 003-2011-05-23        |
+| 4              | URI-004-01-17-08 <br> URI-004-02-07-08    | 004-2010-04-27 <br> 004-2010-05-11 <br> 004-2011-03-22 |
+| 5              | URI-005-01-16-08 <br> URI-005-02-08-08    | 005-2010-05-17 <br> 005-2011-05-25        |
+| 6              | URI-006-01-15-08 <br> URI-006-01-23-08    | 006-2010-03-1                             |
+
+Inside each session folder you can find:
+
+| Study type        | Study 1                                | Study 2                                |
+|-------------------|-----------------------------------------|-----------------------------------------|
+| **Session name**  | `URI-00X-MM-DD-YY`                     | `00X-YYYY-MM-DD`                        |
+| **Raw data files**<br>(in `.csv`) | `MITes_01_RawCorrectedData_Trunk.RAW_DATA.csv` <br> `MITes_08_RawCorrectedData_Left-wrist.RAW_DATA.csv` <br> `MITes_11_RawCorrectedData_Right-wrist.RAW_DATA.csv` <br> `Wocket_00_RawCorrectedData_Right-Wrist.csv` <br> `Wocket_01_RawCorrectedData_Left-Wrist.csv` <br> `Wocket_02_RawCorrectedData_Torso.csv` | *(same structure as Study 1)* |
+| **Annotation files**<br>(in `.xlsx`, `.xml`) | `Annotator1Stereotypy.annotation.*` <br> `Phone.annotation.*` <br> `AnnotationPhoneIntervals.xlsx` <br> `AnnotationVideo1Intervals.xlsx` <br> `AnnotationVideo2Intervals.xlsx` | `Annotator1Stereotypy.annotation.*` <br> `Annotator2Stereotypy.annotation.*` <br> `Phone.annotation.*` |
+
+1. **Raw data files**  
+   - Stored in `.csv` format.  
+   - File naming convention encodes **sensor type**, **sensor ID**, and **sensor location**, separated by `_`.  
+   - Example:  
+     - `MITes_01_RawCorrectedData_Trunk.RAW_DATA.csv`  
+       - **MITes** = sensor type  
+       - **01** = sensor ID  
+       - **Trunk** = sensor location (i.e., **Torso**)  
+   - The same naming convention applies to both **Study 1** and **Study 2** directories.
+     The raw data `.csv` file has **four columns** representing:
+
+    1. **Unix timestamp**  
+    2. **Raw x value**  
+    3. **Raw y value**  
+    4. **Raw z value**
+
+    Notes:
+    - There is **no header row**.  
+    - The raw value is an **integer**:  
+      - Range: `0–1023` for **Wockets**  
+      - Range: `0–512` for **MITes**  
+    - Dynamic range:  
+      - ±2g for **MITes** sensors  
+      - ±4g for **Wockets** sensors  
+    
+    **Example rows:**
+   | Unix timestamp | Raw X | Raw Y | Raw Z |
+    |----------------|-------|-------|-------|
+    | 1274781775000  | 475   | 436   | 435   |
+    | 1274781775009  | 474   | 437   | 436   |
+    | 1274781775017  | 474   | 438   | 433   |
+    | ...            | ...   | ...   | ...   |
+    | 1274782392242  | 501   | 469   | 415   |
+    | 1274782392253  | 501   | 468   | 416   |
+    | 1274782392263  | 504   | 466   | 418   |
+
+3. **Annotation files**  
+   - Stored in multiple formats: `.xlsx`, `.xml`, and `.csv`.  
+   - Contents are the same across formats (provided for user convenience).  
+
+   a) **Annotation types**  
+   - `Annotator1Stereotypy.annotation.*` or `Annotator2Stereotypy.annotation.*` → **offline annotations**  
+   - `Phone.annotation.*` → **online annotation**  
+
+   b) **Interval annotations**  
+   - Files with the pattern:  
+     - `Annotation*Intervals.xlsx`  
+     are used specifically for 001-2010-05-28 due to legacy reasons
+
 ### `dataset.pkl`
 
 The `.pkl` file contains pose estimation tracking data extracted from MediaPipe’s *BlazePose* model, along with additional metadata for each video in publicly available data from [Goodwin et al. 2014](https://dl.acm.org/doi/10.1145/2632048.2632096) Each entry of the `.pkl` file contains the following:
