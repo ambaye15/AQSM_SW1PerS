@@ -44,7 +44,6 @@ class ClassificationExperiments:
                  optimize = False,
                  load_params = None,
                  optimize_feature_space = False,
-                 return_model = True,
                  random_state = 42):
      
         self.scores_dir = scores_dir
@@ -56,7 +55,6 @@ class ClassificationExperiments:
         self.load_params = load_params
         self.optimize = optimize
         self.optimize_feature_space = optimize_feature_space
-        self.return_model = return_model
 
         self.random_state = random_state
 
