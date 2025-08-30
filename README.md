@@ -47,6 +47,8 @@ You can download the following data (link coming soon):
 
 > Please install Dataset: [Dataset link]()
 
+Create a new directory named `Dataset` in the root and place these in the folder
+
 ---
 
 <a name="structure"></a>
