@@ -29,18 +29,38 @@
 
 ## Installation
 
-### Option 1: Install via GitHub (recommended)
-
+### Option 1 - Clone and Install with `venv`
 ```bash
-pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
-```
-
-### Option 2: Clone and Install Locally
-
-```bash
+# Clone the repository
 git clone https://github.com/ambaye15/AQSM_SW1PerS.git
 cd AQSM_SW1PerS
+
+# Create and activate environment
+python3 -m venv venv
+source venv/bin/activate      # macOS/Linux
+venv\Scripts\activate         # Windows
+
+# Install 
 pip install -e .
+```
+
+### Option 2 - Clone and Install with `conda` environment 
+```bash
+# Clone the repository
+git clone https://github.com/ambaye15/AQSM_SW1PerS.git
+cd AQSM_SW1PerS
+
+# Create and activate environment
+conda create -n aqsm python=3.11
+conda activate aqsm
+
+# Install in editable mode
+pip install -e .
+```
+
+### Option 3 - Install via `pip`
+```bash
+pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 ```
 
 ### HPC Example Setup
@@ -74,7 +94,7 @@ python -m unittest tests/test_periodicity.py
 - `AQSM_SW1PerS/`: Core package with analysis and processing modules. 
 - `classification_tools/`: Code for training and optimizing models.  
 - `notebooks/`: Usage tutorials and visualizations.
-- `Dataset/`: (**Must Downloadf for reproduction of results**) Preprocessed data, YOLO model results, periodicity scores. You must download this seperatley given this link: (Not availble yet)
+- `Dataset/`: (**Must Download for reproduction of results**) Preprocessed data, YOLO model results, periodicity scores. You must download this seperatley given this link: (Not yet available)
 
 ---
 
@@ -82,7 +102,7 @@ python -m unittest tests/test_periodicity.py
 
 ### `data/`
 
-Refer to `Motion sensor data access instructions.pdf` (in the same directory as these intructions) for details on obtaining the accelerometer data, which has been previously published [@goodwinmoving].
+Refer to `Motion sensor data access instructions.pdf` (in the same directory as these intructions) for details on obtaining the accelerometer data, which has been previously published [@goodwin2014].
 
 Once downloaded, extract the data folder and place it into the Dataset directory alongside the following files:
       
@@ -95,7 +115,7 @@ The `.pkl` file contains pose estimation tracking data extracted from MediaPipeâ
     -  0 - No Stereotypy
     -  1 - Rocking
     -  2 - Flapping
-    -  3 - Combination of Flapping and Rocking
+    -  3 - Flaprock
 - `fps`, `frame_count`, `duration` - proivdes the fps, total number of frames and duration of the video
 - `name` - Unique identifier for each entry, structured as (**participant-date\_study** as in the `data/` directory).
 
