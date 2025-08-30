@@ -1,5 +1,6 @@
 import umap.umap_ as umap
 from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 from pandas.api.types import CategoricalDtype
