@@ -1,3 +1,4 @@
+import numpy as np
 import umap.umap_ as umap
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
