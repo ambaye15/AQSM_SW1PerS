@@ -58,7 +58,7 @@ conda activate aqsm
 pip install -e .
 ```
 
-### Install via `pip`
+### Option 3 - Install via `pip`
 ```bash
 pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 ```
