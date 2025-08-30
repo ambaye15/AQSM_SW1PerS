@@ -26,13 +26,42 @@ Stereotypical motor movements (SMM) are a core diagnostic feature of autism that
 - Windows / Linux / macOS
 - Python 3.11
 - PyTorch 2.1.0 (with CUDA 11.8 for GPU support)
+> Please install PyTorch manually using: [https://pytorch.org/get-started/locally](https://pytorch.org/get-started/locally) and follow the instructions
 
-### Install via pip
+
+### Option 1 - Install with `venv`
+```bash
+# Clone the repository
+git clone https://github.com/ambaye15/AQSM_SW1PerS.git
+cd AQSM_SW1PerS
+
+# Create and activate environment
+python3 -m venv venv
+source venv/bin/activate      # macOS/Linux
+venv\Scripts\activate         # Windows
+
+# Install 
+pip install -e .
+```
+
+### Option 2 - Install with `conda`
+```bash
+# Clone the repository
+git clone https://github.com/ambaye15/AQSM_SW1PerS.git
+cd AQSM_SW1PerS
+
+# Create and activate environment
+conda create -n aqsm python=3.11
+conda activate aqsm
+
+# Install in editable mode
+pip install -e .
+```
+
+### Install via `pip`
 ```bash
 pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 ```
-
-> Please install PyTorch manually using: [https://pytorch.org/get-started/locally](https://pytorch.org/get-started/locally)
 
 ### Pose Estimation
 - MediaPipe is automatically installed via `requirements.txt`. For more information on MediaPipe and its other solutions: [https://ai.google.dev/edge/mediapipe/solutions/guide](https://ai.google.dev/edge/mediapipe/solutions/guide)
