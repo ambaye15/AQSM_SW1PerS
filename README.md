@@ -1,7 +1,7 @@
 
 # AQSM-SW1PerS: Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring
 
-This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Pose and Persistence* associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
+This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
 
 ## Table of Contents
 1. [Abstract](#abstract)
@@ -15,7 +15,7 @@ This repository contains code, models, and analysis tools introduced in the pape
 <a name="abstract"></a>
 ## Abstract
 
-Stereotypical motor movements (SMM) are a core diagnostic feature of autism that remains difficult to quantify reliably and efficiently across individuals and developmental stages. The current paper presents a novel pipeline that leverages human pose estimation and Topological Data Analysis to quantify and characterize recurrent movement patterns in video-based data. We construct low-dimensional, interpretable feature vectors that capture geometric properties associated with autistic SMM using persistent homology and extracting periodic structure from time series derived from body landmarks. We demonstrate that these features, combined with simple classifiers, enable the accurate automated classification of SMM. Visualization of the learned feature space reveals that the extracted features generalize across individuals and are not dominated by person-specific SMM. Our results highlight the potential of using mathematically principled features to support scalable, interpretable, and person-agnostic detection of autistic SMM in naturalistic settings.
+Stereotypical motor movements (SMM) are a core diagnostic feature of autism that remain difficult to quantify efficiently and validly across individuals and developmental stages. The current paper presents a novel pipeline that leverages Topological Data Analysis to quantify and characterize recurrent movement patterns. Specifically, we use persistent homology to construct low-dimensional, interpretable feature vectors that capture geometric properties associated with autistic SMM by extracting periodic structure from time series derived from pose estimation landmarks in video data and accelerometer signals from wearable sensors. We demonstrate that these features, combined with simple classifiers, enable accurate automated quantification of autistic SMM. Visualization of the learned feature space reveals that extracted features generalize across individuals and are not dominated by person-specific SMM. Our results highlight the potential of using mathematically principled features to support more scalable, interpretable, and person-agnostic characterization of autistic SMM in naturalistic settings.
 
 ---
 
