@@ -70,11 +70,7 @@ pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 
 ### Data Downloads
 
-You can download the following data (link coming soon):
-- `dataset.pkl` – Contains preprocessed MediaPipe keypoints, annotations, frame rate, and video metadata.
-- `YOLOv5l.zip` – Trained weights and metadata for bounding box inference.
-
-> Please install Dataset: [Dataset link]()
+You can download the following data (data avilable after publishing of paper):
 
 Create a new directory named `Dataset` in the root and place these in the folder
 
