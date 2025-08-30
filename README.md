@@ -160,6 +160,5 @@ plt.show()
 <a name="citation"></a>
 ## Citation
 
-If you use this package in your work, please cite the repository (DOI coming soon). BibTeX and publication link will be included here.
 
 ---
