@@ -36,17 +36,17 @@ def getClass(video_name):
     '''
     Returns YOLOv5 class that will be used on video for each subject
     '''
-    if '001' in video_name:
+    if '001' in str(video_name):
         return 0
-    elif '002' in video_name:
+    elif '002' in str(video_name):
         return 1
-    elif '003' in video_name:
+    elif '003' in str(video_name):
         return 2
-    elif '004' in video_name:
+    elif '004' in str(video_name):
         return 3
-    elif '005' in video_name:
+    elif '005' in str(video_name):
         return 4
-    elif '006' in video_name:
+    elif '006' in str(video_name):
         return 5
     else: 
         return 6
