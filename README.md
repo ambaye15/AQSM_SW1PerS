@@ -64,7 +64,7 @@ pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
 ```
 
 ### Pose Estimation
-- MediaPipe is automatically installed via `requirements.txt`. For more information on MediaPipe and its other solutions: [https://ai.google.dev/edge/mediapipe/solutions/guide](https://ai.google.dev/edge/mediapipe/solutions/guide)
+- MediaPipe is automatically installed with this package. For more information on MediaPipe and its other solutions: [https://ai.google.dev/edge/mediapipe/solutions/guide](https://ai.google.dev/edge/mediapipe/solutions/guide). 
 
 ---
 
@@ -87,13 +87,7 @@ Create a new directory named `Dataset` in the root and place these in the folder
 AQSM_SW1PerS/
 ├── SW1PerS.py               # Core script for persistence scoring
 ├── mediapipe_pose.py        # Pose extraction pipeline (YOLO + MediaPipe)
-├── utils/
-|   ├── accelerometer.py     # Tools for the accompyaning accelerometer data
-│   ├── create_pkl.py        # Construct `dataset.pkl` for the pipeline  # Keypoint smoothing, extraction from pkl
-│   ├── data_processing.py   # Keypoint smoothing, extraction from pkl
-|   ├── paths.py             # Acess contents of 'Dataset' directory from any other directory
-|   ├── period_estimation.py # Tools to estimate period of multivariate time series
-│   └── video_tools.py       # Load annotations, read and write videos from Goodwin et al. (2014)
+├── utils/                    ## General helper tools for data processing and analysis
 classification_tools/        # Model training, evaluation scripts
 notebooks/                   # Demos, tutorials, reproducible figures
 scripts/                     # Batch processing and automation scripts
