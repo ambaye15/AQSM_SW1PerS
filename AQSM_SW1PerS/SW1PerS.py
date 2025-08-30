@@ -107,7 +107,7 @@ def compute_PS(dgm1, method = 'PS1'):
 
 class SW1PerS:
 
-    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47):
+    def __init__(self, start_time = 0, end_time = 4, num_points = 1000, method = 'PS1', d = 23, prime_coeff = 47, f_min = 0.5, f_max = 2.0):
         self.start_time = start_time
         self.end_time = end_time
         self.num_points = num_points
@@ -115,6 +115,8 @@ class SW1PerS:
         self.method = method
         self.d = d
         self.prime_coeff = prime_coeff
+        self.f_min = f_min
+        self.f_max = f_max
 
         #Useful for other analyses or visualizations
         self.component_splines = None
@@ -144,7 +146,7 @@ class SW1PerS:
 
         sampling_rate = self.num_points / (self.end_time - self.start_time)
 
-        period_estimator = PeriodEstimator(sampling_rate, self.num_components, f_min = 0.5, f_max = 2.0, window_size = (self.end_time - self.start_time))
+        period_estimator = PeriodEstimator(sampling_rate, self.num_components, f_min = self.f_min, f_max = self.f_max, window_size = (self.end_time - self.start_time))
         period = period_estimator.estimate_period(self.X_detrended)
         self.period = period
     
