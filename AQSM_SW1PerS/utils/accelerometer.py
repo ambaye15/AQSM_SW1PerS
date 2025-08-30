@@ -151,8 +151,8 @@ def process_accelerometer_data(folder_path, annofile, accel_file):
 
     nanno = getNormalAnnotations(anno)
     
-    anno = expandAnnotations(anno, time=4000, hop = 200)
-    nanno = expandAnnotations(nanno, time=4000, hop = 200)
+    anno = expandAnnotations(anno, time=4000, hop = 4000)
+    nanno = expandAnnotations(nanno, time=4000, hop = 4000)
    
     positive_segments_labels = []
     negative_segments_labels = []
