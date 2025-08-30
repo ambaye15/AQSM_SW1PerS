@@ -64,7 +64,7 @@ def SW1PerS_alt(accelerometer_X, meta_data, method = 'PS1'):
     
                 num_points = int(4 * sampling_rate)
     
-                scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff)
+                scoring_pipeline = SW1PerS(start_time = 0, end_time = 4, num_points = num_points, method = method, d = d, prime_coeff = prime_coeff, f_min = 0.25, f_max = 6.0)
                 scoring_pipeline.compute_score(spline_funcs)
     
                 periodicity_scores.append(scoring_pipeline.periodicity_score)
