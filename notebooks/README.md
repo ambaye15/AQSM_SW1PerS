@@ -29,16 +29,10 @@ A tutorial of the `Sw1PerS` algorithm applied to 3-axis acceleromter data:
 
 ---
 
-## `create_concept_video.ipynb`
-
-A notebook for creating a side-by-side video showing the mediapipe-overlayed skeleton on the left, and the SW1PerS pipeline on the spatial and acceleration trajectories of a particular sensor. This is the notebook used for visualizations during presentations.
-
-Use this notebook to generate videos that showcase important aspects of pipeline.
-
----
 
 ## Notes
 
 - All notebooks assume the `AQSM_SW1PerS` package has been installed (e.g., via `pip install -e .`).
-- To run the notebooks, ensure dependencies are installed and activate the correct environment:
+- To run the notebooks, ensure dependencies are installed and activate the correct environment
+- Ensure that you have a `Dataset` folder in the root that contains the `.pkl` file.
   
