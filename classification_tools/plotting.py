@@ -328,7 +328,7 @@ def plot_UMAP_comparison(df_umap, x_axis = 'UMAP1', y_axis = 'UMAP2', method = r
         linewidth=0,
         ax=ax2
     )
-    ax2.set_title("2D UMAP Accelerometer Feature Space {method}  – Colored by Stereotypy", fontsize=14, family="Times New Roman")
+    ax2.set_title(f"2D UMAP Accelerometer Feature Space {method} – Colored by Stereotypy", fontsize=14, family="Times New Roman")
     ax2.set_xlabel(x_axis, fontsize=12, family="Times New Roman")
     ax2.set_ylabel(y_axis, fontsize=12, family="Times New Roman")
     ax2.set_xticks([]); ax2.set_yticks([])
