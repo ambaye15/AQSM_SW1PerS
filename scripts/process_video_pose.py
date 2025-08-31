@@ -32,9 +32,9 @@ def getLandmarks(video_path):
     model_path = get_data_path("YOLOv5l/yolov5/runs/train/exp/weights", "YOLOv5l_transfer.pt") 
     model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 
-    fps, total_frames, duration_seconds, frame_times = get_video_info(video_path)
-    
-    MPPose = MP_pose(frame_times, fps, model, create_video = False)
+    fps, total_frames, duration_seconds = get_video_info(video_path)
+    frame_times = [1 / fps * i for i in range(int(fps * duration_seconds))]
+    MPPose = MP_pose(frame_times, fps, model, create_video = True)
 
     MPPose._run_pose_inference(video_path)
     
