@@ -4,15 +4,17 @@ This folder contains scripts for batch processing of video and accelerometer dat
 
 ---
 
-## `accelerometer_SW1PerS.py`
+## `accelerometer_processing.py`
 
-Alternative Python script for extracting periodicity scores specifically from accelerometer data using the *SW1PerS* algorithm.
+Alternative Python script for extracting periodicity scores specifically from accelerometer data using the *SW1PerS* algorithm. Used in `exec_accel.sh` to generate a `.csv` file of periodicity scores for a given participant's accelerometer recordings.
 
 ---
 
-## `accelerometer_processing.py`
+## `batch_video_sw1pers.sh`
 
-Used in `exec_accel.sh` to generate a `.csv` file of periodicity scores for a given participant's accelerometer recordings.
+Batch script that:
+- Runs the *SW1PerS* algorithm on the pose data from a video.
+- Outputs `.csv` files containing periodicity scores.
 
 ---
 
@@ -24,33 +26,25 @@ Batch script that:
 
 ---
 
-## `exec_mp.sh`
+## `mediapipe_batch.sh`
 
 Batch script that:
 - Runs MediaPipe pose estimation on a directory of video files.
 - Outputs `.csv` files containing pose landmark coordinates.
 
 ---
+## `process_video_pose.py`
 
-## `exec_sw1pers.sh`
-
-Batch script that:
-- Runs the *SW1PerS* algorithm on a directory of videos.
-- Outputs `.csv` files containing periodicity scores.
+Helper script used in `exec_mp.sh` to run MediaPipe inference on individual video files.
 
 ---
 
-## `feature_processing.py`
+## `video_pose_sw1pers.py`
 
 Helper script used in `exec_sw1pers.sh` to extract periodicity scores from individual video files.
 
 ---
 
-## `video_processing.py`
-
-Helper script used in `exec_mp.sh` to run MediaPipe inference on individual video files.
-
----
 
 ## Notes
 
