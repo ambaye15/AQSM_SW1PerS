@@ -92,28 +92,49 @@ def loadAnnotationsFromXLSX(xlsx_path):
     - 'label': string label
     """
     df = pd.read_excel(xlsx_path, engine='openpyxl', header=None)
-    anno = []
-
+   
+    annotations_accel = [] #For annotation data (in ms)
+    annotations_video = [] #For video data (in s)
+    good_data = []
     for _, row in df.iterrows():
+        label = str(row[3]).strip()
+        start_dt = pd.to_datetime(row[10], errors='coerce')
+        stop_dt = pd.to_datetime(row[11], errors='coerce')
         try:
+            toggle = int(row[9])
+        except:
+            continue
+        if (pd.notnull(toggle) and toggle == 1 and pd.notnull(start_dt) and pd.notnull(stop_dt) and start_dt < stop_dt and label == "Good Data"):
+            good_data_start_unix = to_unix_s(str(start_dt))
+            good_data_end_unix = to_unix_s(str(stop_dt))
+            good_data.append((good_data_start_unix, good_data_end_unix))
+
+    for start_unix, stop_unix in good_data:
+        anno_accel = []
+        anno_video = []
+        
+        for _, row in df.iterrows():
             label = str(row[3]).strip()
             start_dt = pd.to_datetime(row[10], errors='coerce')
             stop_dt = pd.to_datetime(row[11], errors='coerce')
-
-            if pd.notnull(start_dt) and pd.notnull(stop_dt) and start_dt < stop_dt and label != "":
-                anno.append({
+            try:
+                toggle = int(row[9])
+            except: 
+                continue
+            if (toggle == 1 and pd.notnull(start_dt) and pd.notnull(stop_dt) and start_dt < stop_dt and label != ""):
+                anno_accel.append({
                     "start": to_unix_ms(start_dt),
                     "stop": to_unix_ms(stop_dt),
                     "label": label
                 })
-        except Exception as e:
-            print(f"[!!] Error parsing row: {e}")
-            continue
-
-    if not anno:
-        raise ValueError("No valid annotations found in Excel file.")
-
-    return anno
+                anno_video.append({
+                    "start": start_dt.timestamp() - start_unix,
+                    "stop": stop_dt.timestamp() - start_unix,
+                    "label": label
+                })
+        annotations_accel.append(anno_accel)
+        annotations_video.append(anno_video)
+    return good_data, annotations_accel, annotations_video
 
 def getNormalAnnotations(anno, minTime=4000):
     """Create 'normal' annotations for gaps between labeled intervals."""
@@ -173,7 +194,7 @@ def process_accelerometer_data(folder_path, annofile, accel_file):
 
     # Load annotations
     if '001-2010-05-28' in str(folder_path): #This file is special exception that only has correct information in the XLSX file rather than the XML file
-        annotations_accel = [loadAnnotationsFromXLSX(f"{folder_path}/{annofile}")]
+        good_data, annotations_accel, annotations_video = loadAnnotationsFromXLSX(f"{folder_path}/{annofile}")
     else:
         good_data, annotations_accel, annotations_video = loadAnnotations(f"{folder_path}/{annofile}")
 
@@ -205,55 +226,3 @@ def get_accel_data(folder_path, accel_file):
   XsAccel  = loadAccelerometerData(f"{folder_path}/{accel_file}")
   return XsAccel
 
-
-def loadAnnotationsFromXLSX(xlsx_path):
-    """
-    Load all annotations from an Excel file with start/stop/label info.
-    Mirrors the format of loadAnnotations() for XML.
-
-    Returns a list of dictionaries with:
-    - 'start': start time in Unix ms
-    - 'stop' : stop time in Unix ms
-    - 'label': string label
-    """
-    df = pd.read_excel(xlsx_path, engine='openpyxl', header=None)
-    annotations_accel = [] #For annotation data (in ms)
-    annotations_video = [] #For video data (in s)
-    good_data = []
-    for _, row in df.iterrows():
-        try:
-            label = str(row[3]).strip()
-            start_dt = pd.to_datetime(row[10], errors='coerce')
-            stop_dt = pd.to_datetime(row[11], errors='coerce')
-            toggle = int(row[9]).strip()
-            if (toggle == 1 and pd.notnull(start_dt) and pd.notnull(stop_dt) and start_dt < stop_dt and label == "Good Data"):
-                good_data_start_unix = to_unix_s(str(start_dt))
-                good_data_end_unix = to_unix_s(str(stop_dt))
-                good_data.append((good_data_start_unix, good_data_end_unix))
-
-    for start_unix, stop_unix in good_data:
-        for _, row in df.iterrows():
-            try:
-                label = str(row[3]).strip()
-                start_dt = pd.to_datetime(row[10], errors='coerce')
-                stop_dt = pd.to_datetime(row[11], errors='coerce')
-                toggle = int(row[9]).strip()
-                if (toggle == 1 and pd.notnull(start_dt) and pd.notnull(stop_dt) and start_dt < stop_dt and label != ""):
-                    annotations_accel.append({
-                        "start": to_unix_ms(start_dt),
-                        "stop": to_unix_ms(stop_dt),
-                        "label": label
-                    })
-                    anno_video.append({
-                        "start": start_dt.timestamp() - start_unix,
-                        "stop": stop_dt.timestamp() - start_unix,
-                        "label": label
-                    })
-            except Exception as e:
-                print(f"[!!] Error parsing row: {e}")
-                continue
-    
-        if not anno:
-            raise ValueError("No valid annotations found in Excel file.")
-
-    return good_data, annotations_accel, annotations_video
