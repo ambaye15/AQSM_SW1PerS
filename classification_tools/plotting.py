@@ -165,6 +165,9 @@ def compare_feature_importances(class1,
     if class1.input_modality == 'accelerometer':
         sensors = sensors1 = sensors2 = sensor_names2 = ["Torso", "LWrist", "RWrist"]
         feature_names_10 = [f"Torso_{i}" for i in range(1, 11)] + [f"LWrist_{i}" for i in range(1, 11)] + [f"RWrist_{i}" for i in range(1, 11)]
+        if class1.include_freq:
+            sensors = sensors1 = sensors2 = sensor_names2 = ["Torso", "LWrist", "RWrist", "Torso_Period", "LWrist_Period", "RWrist_Period"]
+            feature_names_10 = [f"Torso_{i}" for i in range(1, 11)] + [f"LWrist_{i}" for i in range(1, 11)] + [f"RWrist_{i}" for i in range(1, 11)] + ["Torso_Period", "LWrist_Period", "RWrist_Period"]
     else:
         sensors = sensors1 = sensors2 = sensor_names2 = sensor_names = ["Head", "RWrist", "LWrist", "RShoulder", "LShoulder", "Chest", "Head_Accel", "RWrist_Accel", "LWrist_Accel", "RShoulder_Accel", "LShoulder_Accel", "Chest_Accel"]
 
