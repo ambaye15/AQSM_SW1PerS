@@ -95,7 +95,7 @@ class MP_pose:
         table = np.array([((i / 255.0) ** invGamma) * 255 for i in range(256)]).astype("uint8")
         return cv2.LUT(frame, table)
 
-    def _getNormalizedFrameLandmark(self, lmrk, dims, xmin, xmax, ymin, ymax):
+    def _getNormalizedFrameLandmark(self, lmrk, xmin, xmax, ymin, ymax):
         '''
         Normalized landmark with respect to frame, instead of YOLOv5 bounding box
         '''
