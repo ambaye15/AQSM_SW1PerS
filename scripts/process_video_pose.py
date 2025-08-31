@@ -22,7 +22,7 @@ import argparse
 '''
 IMPORTANT - Ensure that 'Videos' directory is located in same directory as this script
 '''
-def getKeypoints(video_path):
+def getLandmarks(video_path):
 
     windows_os = False #If you are using a windows OS, you may need to turn this to true since we trained YOLO model on UNIX
     if windows_os:
@@ -42,4 +42,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a video file.')
     parser.add_argument('--input', required=True, help='Path to the input video file')
     args = parser.parse_args()
-    getKeypoints(args.input)
+    getLandmarks(args.input)
