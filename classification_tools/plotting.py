@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 from pandas.api.types import CategoricalDtype
+from sklearn.preprocessing import label_binarize
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc, precision_recall_curve, average_precision_score
 
 
