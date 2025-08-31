@@ -16,6 +16,7 @@ setup(
         "ripser",
         "scipy",
         "seaborn",
+        "plotly",
         "persim",
         "opencv-python",
         "ultralytics",
