@@ -21,81 +21,9 @@ import xml.etree.ElementTree as ET
 import glob
 from collections import Counter
 import pandas as pd
+from AQSM_SW1PerS.utils.accelerometer import *
 
-
-# Section: Convert Times
-# -------------------------------------------------
-
-def getTime(s):
-    '''
-    Convert time from YYYY-MM-DD HH:MM:SS.mmm into seconds 
-    '''
-    if isinstance(s, datetime):  
-        return s.timestamp()
-    else:
-        t = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f")
-        return t.timestamp()
-      
-
-def getUnix(dt_str):
-    '''
-    Convert to Unix timestamp
-    '''
-    dt_obj = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S.%f")
-    return dt_obj.timestamp()
-  
-   
-def parse_datetime(datetime_str):
-    '''
-    Parse the datetime string
-    '''
-    format_str = '%Y-%m-%d-%H-%M-%S-%f'
-    return datetime.strptime(datetime_str, format_str)
-
-# Section: Annotation Tools
-# -----------------------------------------------
-
-def loadAnnotations(filename):
-    '''
-    Load annotations into a dictionary format and extract UNIX times for each Good Data interval.
-    Each interval's annotations are stored in a distinct list.
-    '''
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    annotations = []
-    good_data = []
-
-    # Identify Good Data intervals
-    for m in root: #This line iterates over the top-level elements (or "child" elements) directly under the root element of the XML file.
-        for c in m: #This line iterates over the sub-elements (or "children") of each element m
-            if c.tag == "LABEL" and c.text == "Good Data": #This line checks if the tag name of the sub-element c is "LABEL" and if its text content (i.e., the text between <LABEL> and </LABEL> in the XML file) is "Good Data"
-                good_data_start_unix = getUnix(m.find("START_DT").text)
-                good_data_end_unix = getUnix(m.find("STOP_DT").text)
-                good_data.append((good_data_start_unix, good_data_end_unix))
-
-    # Process annotations for each Good Data interval
-    
-    for start_unix, stop_unix in good_data:
-        anno = []
-        for m in root:
-            start = -1
-            stop = -1
-            label = ""
-            for c in m:
-                if c.tag == "START_DT":
-                    start = getTime(c.text) - start_unix
-                elif c.tag == "STOP_DT":
-                    stop = getTime(c.text) - start_unix
-                elif c.tag == "LABEL":
-                    label = c.text
-
-            # Only append valid annotations within the Good Data interval
-            if 0 <= start < (stop_unix - start_unix) and stop > 0:
-                start = max(start, 0)
-                stop = min(stop, stop_unix - start_unix)
-                anno.append({"start": start, "stop": stop, "label": label})
-        annotations.append(anno)
-    return annotations, good_data
+#See AQSM_SW1PerS.utils.accelerometer for details on how to access annotations
 
 # Section: Write videos from images in dataset using annotations
 # ---------------------------------------------------------------
@@ -121,8 +49,8 @@ def findFrames(folder_path, start_unix, end_unix):
 
     for img_path in image_paths:
         img_name = os.path.basename(img_path).split('.')[0]
-        timestamp = parse_datetime(img_name)
-        frame_time = getTime(timestamp)
+        timestamp = datetime.datetime.strptime(img_name, '%Y-%m-%d-%H-%M-%S-%f')
+        frame_time = to_unix_s(timestamp)
 
         # Check if frame is within the "Good Data" interval
         if start_unix <= frame_time <= end_unix:
@@ -151,8 +79,8 @@ def write_video(folder_path, output_name, good_data, annotations):
 
         for img_path in image_paths:
             img_name = os.path.basename(img_path).split('.')[0]
-            timestamp = parse_datetime(img_name)
-            frame_time = getTime(timestamp)
+            timestamp = datetime.datetime.strptime(img_name, '%Y-%m-%d-%H-%M-%S-%f')
+            frame_time = to_unix_s(timestamp)
 
             # Check if frame is within the "Good Data" interval
             if start_unix <= frame_time <= end_unix:
