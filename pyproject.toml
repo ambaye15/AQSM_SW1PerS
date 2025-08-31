@@ -29,6 +29,7 @@ dependencies = [
   "filterpy",
   "sympy",
   "imbalanced-learn",
+  "ultralytics",
   "scikit-optimize",
   "joblib",
   "tqdm",
