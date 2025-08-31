@@ -18,4 +18,4 @@ FILENAME=$(ls Vids/*.avi | sed -n "$((SLURM_ARRAY_TASK_ID + 1))p")
 
 echo "Processing file: $FILENAME"
 
-python video_processing.py --input "$FILENAME"
+python process_video_pose.py --input "$FILENAME"
