@@ -24,6 +24,7 @@ setup(
         "sympy",
         "imbalanced-learn",
         "scikit-optimize",
+        "openpyxl",
         "joblib",
         "tqdm",
         "PyYAML",
