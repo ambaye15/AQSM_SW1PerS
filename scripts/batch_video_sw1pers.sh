@@ -25,4 +25,4 @@ fi
 FOLDER="${folder_list[$SLURM_ARRAY_TASK_ID]}"
 echo "Processing folder: $FOLDER"
 
-python feature_processing.py --input "$FOLDER" 
+python video_pose_sw1pers.py --input "$FOLDER" 
