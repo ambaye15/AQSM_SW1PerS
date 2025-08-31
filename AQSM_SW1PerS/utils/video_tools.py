@@ -43,14 +43,13 @@ def findFrames(folder_path, start_unix, end_unix):
     '''
     This is necessary to get the total number of frames needed to compute the fps of the video
     '''
-    total_frames=0
+    total_frames = 0
      # Use glob to get all image paths in nested folders
     image_paths = sorted(glob.glob(f"{folder_path}/**/*.jpg", recursive=True))
 
     for img_path in image_paths:
         img_name = os.path.basename(img_path).split('.')[0]
-        timestamp = datetime.datetime.strptime(img_name, '%Y-%m-%d-%H-%M-%S-%f')
-        frame_time = to_unix_s(timestamp)
+        frame_time = datetime.datetime.strptime(str(img_name), "%Y-%m-%d-%H-%M-%S-%f").timestamp()
 
         # Check if frame is within the "Good Data" interval
         if start_unix <= frame_time <= end_unix:
@@ -69,7 +68,7 @@ def write_video(folder_path, output_name, good_data, annotations):
         part_annotations = []  # List to store annotations for the current part
         
         total_frames = findFrames(folder_path, start_unix, end_unix)
-        fps = total_frames/(end_unix - start_unix)
+        fps = total_frames / (end_unix - start_unix)
         # Set up video writer for each part
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(f'{output_name}_part_{i+1}.mp4', fourcc, fps, (352, 288))  # Adjust dimensions as needed
@@ -79,8 +78,7 @@ def write_video(folder_path, output_name, good_data, annotations):
 
         for img_path in image_paths:
             img_name = os.path.basename(img_path).split('.')[0]
-            timestamp = datetime.datetime.strptime(img_name, '%Y-%m-%d-%H-%M-%S-%f')
-            frame_time = to_unix_s(timestamp)
+            frame_time = datetime.datetime.strptime(str(img_name), "%Y-%m-%d-%H-%M-%S-%f").timestamp()
 
             # Check if frame is within the "Good Data" interval
             if start_unix <= frame_time <= end_unix:
@@ -100,8 +98,8 @@ def write_video(folder_path, output_name, good_data, annotations):
                         num_label = 3  
                         
                     part_annotations.append(num_label)  # Store annotation for this frame
-                    # Overlay the annotation label onto the frame
-                    cv2.putText(img, annotation_label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                    # Optionally overlay the annotation label onto the frame
+                    #cv2.putText(img, annotation_label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 else:
                     part_annotations.append(num_label)
                 # Write the frame to the video file
