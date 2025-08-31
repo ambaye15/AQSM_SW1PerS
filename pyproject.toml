@@ -23,6 +23,7 @@ dependencies = [
   "ripser",
   "scipy",
   "seaborn",
+  "plotly",
   "persim",
   "opencv-python",
   "mediapipe",
