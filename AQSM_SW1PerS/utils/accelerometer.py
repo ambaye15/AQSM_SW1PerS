@@ -24,31 +24,62 @@ from scipy.ndimage import gaussian_filter1d
 # Section: Data Folder Tools
 # -------------------------------------------------
 
-def getTime(s):
-    """Convert time string to Unix milliseconds."""
-    spre, smilli = s.split(".")
-    t = calendar.timegm(datetime.datetime.strptime(spre, "%Y-%m-%d %H:%M:%S").timetuple())
-    return t * 1000 + float(smilli)
+def to_unix_s(dt_str):
+    '''
+    Convert to Unix timestamp for video writing
+    '''
+    dt_obj = datetime.datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S.%f")
+    return dt_obj.timestamp()
+
 
 def to_unix_ms(dt):
     return int(calendar.timegm(dt.timetuple()) * 1000 + dt.microsecond // 1000)
-    
+
+
 def loadAnnotations(filename):
     """Load XML annotations with START_DT, STOP_DT, LABEL tags."""
     tree = ET.parse(filename)
     root = tree.getroot()
-    anno = []
-    for m in list(root):
-        start, stop, label = -1, -1, ""
-        for c in list(m):
-            if c.tag == "START_DT":
-                start = getTime(c.text)
-            elif c.tag == "STOP_DT":
-                stop = getTime(c.text)
-            elif c.tag == "LABEL":
-                label = c.text
-        anno.append({"start": start, "stop": stop, "label": label})
-    return anno
+    annotations_accel = [] #For annotation data (in ms)
+    annotations_video = [] #For video data (in s)
+    good_data = [] # Helper for video data
+
+    # Identify Good Data intervals
+    for m in root: #This line iterates over the top-level elements (or "child" elements) directly under the root element of the XML file.
+        for c in m: #This line iterates over the sub-elements (or "children") of each element m
+            if c.tag == "LABEL" and c.text == "Good Data": #This line checks if the tag name of the sub-element c is "LABEL" and if its text content (i.e., the text between <LABEL> and </LABEL> in the XML file) is "Good Data"
+                good_data_start_unix = to_unix_s(m.find("START_DT").text)
+                good_data_end_unix = to_unix_s(m.find("STOP_DT").text)
+                good_data.append((good_data_start_unix, good_data_end_unix))
+
+    for start_unix, stop_unix in good_data:
+        anno_accel = []
+        anno_video = []
+        for m in list(root):
+            start, stop, label = -1, -1, ""
+            for c in list(m):
+                if c.tag == "START_DT":
+                    dt = datetime.datetime.strptime(c.text, "%Y-%m-%d %H:%M:%S.%f")
+                    start_ms = to_unix_ms(dt)
+                    start_s = dt.timestamp() - start_unix #Relative start
+                elif c.tag == "STOP_DT":
+                    dt = datetime.datetime.strptime(c.text, "%Y-%m-%d %H:%M:%S.%f")
+                    stop_ms = to_unix_ms(dt)
+                    stop_s = dt.timestamp() - start_unix
+                elif c.tag == "LABEL":
+                    label = c.text
+                 # Only append valid annotations within the Good Data interval
+            if 0 <= start_s < (stop_unix - start_unix) and stop_s > 0:
+                start_s = max(start_s, 0)
+                stop_s = min(stop_s, stop_unix - start_unix)
+                anno_accel.append({"start": start_ms, "stop": stop_ms, "label": label})
+                anno_video.append({"start": start_s, "stop": stop_s, "label": label})
+                
+        annotations_accel.append(anno_accel)
+        annotations_video.append(anno_video)
+        
+    return good_data, annotations_accel, annotations_video
+
 
 def loadAnnotationsFromXLSX(xlsx_path):
     """
@@ -142,11 +173,11 @@ def process_accelerometer_data(folder_path, annofile, accel_file):
 
     # Load annotations
     if '001-2010-05-28' in str(folder_path): #This file is special exception that only has correct information in the XLSX file rather than the XML file
-        anno = loadAnnotationsFromXLSX(f"{folder_path}/{annofile}")
+        annotations_accel = [loadAnnotationsFromXLSX(f"{folder_path}/{annofile}")]
     else:
-        anno = loadAnnotations(f"{folder_path}/{annofile}")
+        good_data, annotations_accel, annotations_video = loadAnnotations(f"{folder_path}/{annofile}")
 
-    anno = anno[1::]
+    anno = np.concatenate([sub[1:] for sub in annotations_accel])
     anno = [a for a in anno if "Good Data" not in str(a)]
 
     nanno = getNormalAnnotations(anno)
