@@ -17,7 +17,7 @@ from persim import plot_diagrams
 from scipy.interpolate import CubicSpline
 import pandas as pd
 import numpy as np
-from scipy import signal
+import scipy.signal as spsig
 from scipy import interpolate
 from numpy.linalg import norm
 from sklearn.neighbors import NearestNeighbors
@@ -130,7 +130,7 @@ class SW1PerS:
     def _detrend_and_convert(self, spline_funcs):
         
         detrended_signals = [
-            signal.detrend(f(self.time_values)) for f in spline_funcs
+            spsig.detrend(f(self.time_values)) for f in spline_funcs
         ]
 
         self.X_detrended = np.column_stack(detrended_signals)
