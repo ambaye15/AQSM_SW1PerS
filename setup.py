@@ -18,6 +18,7 @@ setup(
         "seaborn",
         "persim",
         "opencv-python",
+        "ultralytics",
         "mediapipe",
         "filterpy",
         "sympy",
