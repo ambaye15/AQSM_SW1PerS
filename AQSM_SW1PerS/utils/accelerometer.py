@@ -115,8 +115,11 @@ def loadAnnotationsFromXLSX(xlsx_path):
         
         for _, row in df.iterrows():
             label = str(row[3]).strip()
-            start_dt = pd.to_datetime(row[10], errors='coerce')
-            stop_dt = pd.to_datetime(row[11], errors='coerce')
+            try:
+                start_dt = datetime.datetime.strptime(str(row[10]), "%Y-%m-%d %H:%M:%S.%f") 
+                stop_dt = datetime.datetime.strptime(str(row[11]), "%Y-%m-%d %H:%M:%S.%f") 
+            except:
+                continue
             try:
                 toggle = int(row[9])
             except: 
