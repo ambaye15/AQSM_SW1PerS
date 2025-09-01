@@ -27,15 +27,15 @@ def compare_confusion_matrices(class1,
     disp1 = ConfusionMatrixDisplay(confusion_matrix=cm1, display_labels=class1.class_names)
     disp1.plot(cmap="Blues", xticks_rotation=45, ax=axes[0], colorbar=False)
     axes[0].set_title(plot1_title)
-    axes[0].text(-0.1, 1.02, "(a)", transform=axes[0].transAxes,
-                 ha="left", va="bottom", fontweight="bold")
+    axes[0].text(-0.1, 1.02, "a", transform=axes[0].transAxes,
+                 ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
     
     # Panel (b)
     disp2 = ConfusionMatrixDisplay(confusion_matrix=cm2, display_labels=class1.class_names)
     disp2.plot(cmap="Blues", xticks_rotation=45, ax=axes[1], colorbar=False)
     axes[1].set_title(plot2_title)
-    axes[1].text(-0.1, 1.02, "(b)", transform=axes[1].transAxes,
-                 ha="left", va="bottom", fontweight="bold")
+    axes[1].text(-0.1, 1.02, "b", transform=axes[1].transAxes,
+                 ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
     
     plt.show()
     if save_fig:
@@ -73,8 +73,8 @@ def compare_pr_curves(class1,
         axes[0].grid(True)
         axes[0].set_ylim([0.0, 1.05])
         axes[0].set_xlim([0.0, 1.0])
-        axes[0].text(-0.1, 1.02, "(a)", transform=axes[0].transAxes,
-                     ha="left", va="bottom", fontweight="bold")
+        axes[0].text(-0.1, 1.02, "a", transform=axes[0].transAxes,
+                     ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
 
         axes[1].plot(recall2, precision2, lw=2, label=f'AP = {avg_precision2:.2f}')
         axes[1].set_xlabel('Recall')
@@ -84,8 +84,8 @@ def compare_pr_curves(class1,
         axes[1].grid(True)
         axes[1].set_ylim([0.0, 1.05])
         axes[1].set_xlim([0.0, 1.0])
-        axes[1].text(-0.1, 1.02, "(b)", transform=axes[1].transAxes,
-                     ha="left", va="bottom", fontweight="bold")
+        axes[1].text(-0.1, 1.02, "b", transform=axes[1].transAxes,
+                     ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
         
         plt.show()
         if save_fig:
@@ -120,8 +120,8 @@ def compare_pr_curves(class1,
         axes[0].grid(True)
         axes[0].set_ylim([0.0, 1.05])
         axes[0].set_xlim([0.0, 1.0])
-        axes[0].text(-0.1, 1.02, "(a)", transform=axes[0].transAxes,
-                     ha="left", va="bottom", fontweight="bold")
+        axes[0].text(-0.1, 1.02, "a", transform=axes[0].transAxes,
+                     ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
 
         for i in range(len(classes)):
             axes[1].plot(recall2[i], precision2[i], lw=2, label=f'{class_names[i]} (AP = {avg_precision2[i]:.2f})')
@@ -132,8 +132,8 @@ def compare_pr_curves(class1,
         axes[1].grid(True)
         axes[1].set_ylim([0.0, 1.05])
         axes[1].set_xlim([0.0, 1.0])
-        axes[1].text(-0.1, 1.02, "(b)", transform=axes[1].transAxes,
-                     ha="left", va="bottom", fontweight="bold")
+        axes[1].text(-0.1, 1.02, "b", transform=axes[1].transAxes,
+                     ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
         plt.show()
         if save_fig:
             fig.savefig(fig_path, bbox_inches="tight", dpi=300)
@@ -208,8 +208,8 @@ def compare_feature_importances(class1,
     axes[0].set_xticklabels(sensors1, rotation=45)
     axes[0].set_ylabel("Importances", family = "Times New Roman", fontsize = 15)
     axes[0].set_title(plot1_title, family = "Times New Roman", fontsize = 20)
-    axes[0].text(-0.05, 1.02, "(a)", transform=axes[0].transAxes,
-                 ha="left", va="bottom", fontweight="bold")
+    axes[0].text(-0.05, 1.02, "a", transform=axes[0].transAxes,
+                 ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
     
     # (b) model2
     axes[1].bar(np.arange(len(sensors2)), imp2_sum)
@@ -218,8 +218,8 @@ def compare_feature_importances(class1,
     axes[1].set_ylabel("Summed Importances", family = "Times New Roman", fontsize = 15)
     
     axes[1].set_title(plot2_title,  family = "Times New Roman", fontsize = 20)
-    axes[1].text(-0.05, 1.02, "(b)", transform=axes[1].transAxes,
-                 ha="left", va="bottom", fontweight="bold")
+    axes[1].text(-0.05, 1.02, "b", transform=axes[1].transAxes,
+                 ha="left", va="bottom", fontsize=30, fontweight="bold", family="Times New Roman")
     
     plt.show()
     if save_fig:
@@ -316,8 +316,8 @@ def plot_UMAP_comparison(df_umap, x_axis = 'UMAP1', y_axis = 'UMAP2', method = r
     ax1.set_xlabel(x_axis, fontsize=12, family="Times New Roman")
     ax1.set_ylabel(y_axis, fontsize=12, family="Times New Roman")
     ax1.set_xticks([]); ax1.set_yticks([])
-    ax1.text(-0.1, 1.05, "(a)", transform=ax1.transAxes, fontsize=14, fontweight="bold", family="Times New Roman")
-    ax1.legend(title='Participant', title_fontsize=10, fontsize=8, loc='center left', bbox_to_anchor=(1.02, 0.5), prop={'family': 'Times New Roman'})
+    ax1.text(-0.1, 1.05, "a", transform=ax1.transAxes, fontsize=30, fontweight="bold", family="Times New Roman")
+    ax1.legend(title='ID', title_fontsize=10, fontsize=8, loc='center left', bbox_to_anchor=(1.02, 0.5), prop={'family': 'Times New Roman'})
     
     # Panel (b): Colored by Stereotypy
     sns.scatterplot(
@@ -335,7 +335,7 @@ def plot_UMAP_comparison(df_umap, x_axis = 'UMAP1', y_axis = 'UMAP2', method = r
     ax2.set_xlabel(x_axis, fontsize=12, family="Times New Roman")
     ax2.set_ylabel(y_axis, fontsize=12, family="Times New Roman")
     ax2.set_xticks([]); ax2.set_yticks([])
-    ax2.text(-0.1, 1.05, "(b)", transform=ax2.transAxes, fontsize=14, fontweight="bold", family="Times New Roman")
+    ax2.text(-0.1, 1.05, "b", transform=ax2.transAxes, fontsize=30, fontweight="bold", family="Times New Roman")
     ax2.legend(title='Class', title_fontsize=10, fontsize=9, prop={'family': 'Times New Roman'})
     
     plt.tight_layout()
