@@ -54,7 +54,14 @@ def findFrames(folder_path, start_unix, end_unix):
         # Check if frame is within the "Good Data" interval
         if start_unix <= frame_time <= end_unix:
             total_frames += 1
-    return total_frames
+    img = cv2.imread(img_path)
+    if img is not None:
+        height, width = img.shape[:2]
+        print(f"{img_name}: width={width}, height={height}")
+
+    video_dims = (width, height)
+    
+    return total_frames, video_dims
 
 
 def write_video(folder_path, output_name, good_data, annotations):
@@ -67,11 +74,11 @@ def write_video(folder_path, output_name, good_data, annotations):
     for i, (start_unix, end_unix) in enumerate(good_data):
         part_annotations = []  # List to store annotations for the current part
         
-        total_frames = findFrames(folder_path, start_unix, end_unix)
+        total_frames, video_dims = findFrames(folder_path, start_unix, end_unix)
         fps = total_frames / (end_unix - start_unix)
         # Set up video writer for each part
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(f'{output_name}_part_{i+1}.mp4', fourcc, fps, (352, 288))  # Adjust dimensions as needed
+        out = cv2.VideoWriter(f'{output_name}_part_{i+1}.mp4', fourcc, fps, video_dims) 
 
         # Use glob to get all image paths in nested folders
         image_paths = sorted(glob.glob(f"{folder_path}/**/*.jpg", recursive=True))
