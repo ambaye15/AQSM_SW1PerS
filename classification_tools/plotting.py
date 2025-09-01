@@ -312,12 +312,12 @@ def plot_UMAP_comparison(df_umap, x_axis = 'UMAP1', y_axis = 'UMAP2', method = r
         linewidth=0,
         ax=ax1
     )
-    ax1.set_title(f"2D UMAP Accelerometer Feature Space {method} – Colored by Child", fontsize=14, family="Times New Roman")
+    ax1.set_title(f"2D UMAP Accelerometer Feature Space {method} – Colored by Participant", fontsize=14, family="Times New Roman")
     ax1.set_xlabel(x_axis, fontsize=12, family="Times New Roman")
     ax1.set_ylabel(y_axis, fontsize=12, family="Times New Roman")
     ax1.set_xticks([]); ax1.set_yticks([])
     ax1.text(-0.1, 1.05, "(a)", transform=ax1.transAxes, fontsize=14, fontweight="bold", family="Times New Roman")
-    ax1.legend(title='Child', title_fontsize=10, fontsize=8, loc='center left', bbox_to_anchor=(1.02, 0.5), prop={'family': 'Times New Roman'})
+    ax1.legend(title='Participant', title_fontsize=10, fontsize=8, loc='center left', bbox_to_anchor=(1.02, 0.5), prop={'family': 'Times New Roman'})
     
     # Panel (b): Colored by Stereotypy
     sns.scatterplot(
