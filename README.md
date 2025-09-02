@@ -58,11 +58,6 @@ conda activate aqsm
 pip install -e .
 ```
 
-### Option 3 - Install via `pip`
-```bash
-pip install git+https://github.com/ambaye15/AQSM_SW1PerS.git
-```
-
 ### Pose Estimation
 - MediaPipe is automatically installed with this package. For more information on MediaPipe and its other solutions: [https://ai.google.dev/edge/mediapipe/solutions/guide](https://ai.google.dev/edge/mediapipe/solutions/guide). 
 
