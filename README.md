@@ -1,7 +1,7 @@
 
 # AQSM-SW1PerS: Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring
 
-This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
+This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* (currently in submission) associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
 
 ## Table of Contents
 1. [Abstract](#abstract)
