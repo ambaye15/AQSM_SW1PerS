@@ -155,18 +155,25 @@ plt.show()
 <a name="citation"></a>
 ## Citation
 
-The preprint for our paper is available: 
+The preprint for our paper is available:
 
-@article {MBaye2025AQSM,
-	author = {MBaye, Austin A and Perea, Jose A. and Tralie, Christopher J. and Goodwin, Matthew S.},
-	title = {Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology},
-	elocation-id = {2025.09.03.674008},
-	year = {2025},
-	doi = {10.1101/2025.09.03.674008},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008},
-	eprint = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008.full.pdf},
-	journal = {bioRxiv}
+> MBaye, Austin A., Perea, Jose A., Tralie, Christopher J., & Goodwin, Matthew S.  
+> *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology.*  
+> bioRxiv, 2025. https://doi.org/10.1101/2025.09.03.674008  
+
+BibTeX:
+```bibtex
+@article{MBaye2025AQSM,
+  author    = {MBaye, Austin A and Perea, Jose A. and Tralie, Christopher J. and Goodwin, Matthew S.},
+  title     = {Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology},
+  elocation-id = {2025.09.03.674008},
+  year      = {2025},
+  doi       = {10.1101/2025.09.03.674008},
+  publisher = {Cold Spring Harbor Laboratory},
+  url       = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008},
+  eprint    = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008.full.pdf},
+  journal   = {bioRxiv}
 }
+
 
 ---
