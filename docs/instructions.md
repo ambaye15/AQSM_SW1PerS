@@ -90,11 +90,27 @@ python -m unittest tests/test_periodicity.py
 - `AQSM_SW1PerS/`: Core package with analysis and processing modules. 
 - `classification_tools/`: Code for training and optimizing models.  
 - `notebooks/`: Usage tutorials and visualizations.
-- `Dataset/`: (**Must Download for reproduction of results**) Preprocessed data, YOLO model results, periodicity scores. You must download this seperatley given this link: (Not yet available)
+- `Dataset/`: (**Must Download for reproduction of results**) The dataset supporting *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* is publicly available on [Figshare](https://doi.org/10.6084/m9.figshare.12345678). It contains de-identified pose-estimation data (MediaPipe skeleton trajectories) collected during annotated sessions of stereotypical motor movements. The dataset also includes topologically derived periodicity scores computed for 4-second time windows, organized by experimental condition used for classification experiments.
+
+If you use this dataset, please cite it as:
+
+MBaye, Austin (2025). AQSM Dataset. figshare. Dataset. https://doi.org/10.6084/m9.figshare.30100669.v1
+
+BibTeX:
+```bibtex
+@misc{MBaye2025,
+author = "Austin MBaye",
+title = "{AQSM Dataset}",
+year = "2025",
+month = "9",
+url = "https://figshare.com/articles/dataset/AQSM_Dataset/30100669",
+doi = "10.6084/m9.figshare.30100669.v1"
+}
+```
 
 ---
 
-## Data Overview (WILL BE AVAILABLE AT TIME OF PUBLCIATION)
+## Data Overview 
 
 ### `data/`
 
@@ -116,10 +132,6 @@ The `.pkl` file contains pose estimation tracking data extracted from MediaPipeâ
 - `name` - Unique identifier for each entry, structured as (**participant-date\_study** as in the `data/` directory).
 
 This `.pkl` file contains all necessary de-identifiable data for the analysis, while allowing room for further modifications or new ideas using the raw MediaPipe landmark data.
-
-### `YOLOv5l/`
-
-Trained YOLOv5l model weights and figures.
 
 ### `experiments/`
 
