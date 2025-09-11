@@ -63,11 +63,27 @@ pip install -e .
 
 ---
 
-### Data Downloads
+### Data Availability
 
-You can download the following data (data avilable after publishing of paper):
+The dataset supporting *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* is publicly available on [Figshare](https://doi.org/10.6084/m9.figshare.12345678). It contains de-identified pose-estimation data (MediaPipe skeleton trajectories) collected during annotated sessions of stereotypical motor movements. The dataset also includes topologically derived periodicity scores computed for 4-second time windows, organized by experimental condition used for classification experiments.
 
-Create a new directory named `Dataset` in the root and place these in the folder
+If you use this dataset, please cite it as:
+
+MBaye, Austin (2025). AQSM Dataset. figshare. Dataset. https://doi.org/10.6084/m9.figshare.30100669.v1
+
+BibTeX:
+```bibtex
+@misc{MBaye2025,
+author = "Austin MBaye",
+title = "{AQSM Dataset}",
+year = "2025",
+month = "9",
+url = "https://figshare.com/articles/dataset/AQSM_Dataset/30100669",
+doi = "10.6084/m9.figshare.30100669.v1"
+}
+```
+
+Place this data folder into the root directory of this repository.
 
 ---
 
