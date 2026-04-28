@@ -16,7 +16,7 @@ import pandas as pd
 import pickle
 import os
 
-def create_pickle_dataset(keypoint_folder = 'MediaPipeData', annotations_csv = 'study_annotations.csv', output_file = 'dataset.pkl')
+def create_pickle_dataset(keypoint_folder = 'MediaPipeData', annotations_csv = 'study_annotations.csv', output_file = 'dataset.pkl'):
     '''
     Makes a cohesive .pkl file that includes information for all videos. 
     :Param keypoint_folder = 'MediaPipeData': Directory where all MediaPipe keypoint information was collected
