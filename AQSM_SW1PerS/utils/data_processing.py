@@ -309,7 +309,7 @@ def extract_landmarks(entry, landmark_index, frame_times, fps, do_wrists=False,
         
         df.loc[df["Time"].isin(bad_visibility_frames), ["Acceleration X", "Acceleration Y"]] = 10000
         
-        bad_frames = df[(np.abs(df["Acceleration X"]) > 4) | (np.abs(df["Acceleration Y"]) > 10)].index
+        bad_frames = df[(np.abs(df["Acceleration X"]) > 1.0) | (np.abs(df["Acceleration Y"]) > 1.0)].index
         df["Valid"] = True
         df.loc[bad_frames, "Valid"] = False
         df.loc[bad_frames, ["X", "Y"]] = np.nan
