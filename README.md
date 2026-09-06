@@ -171,15 +171,6 @@ plt.show()
 <a name="citation"></a>
 ## Citation
 
-The preprint for our paper is available:
-
-> MBaye, A. A., Perea, J. A., Tralie, C. J., and Goodwin, M. S.
-> 
-> MBaye, Austin A., Perea, Jose A., Tralie, Christopher J., & Goodwin, Matthew S.  
-> *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology.*  
-> Scientific Reports (2026). https://doi.org/10.1038/s41598-026-60095-8
-
-BibTeX:
 ```bibtex
 @article{mbaye2026automated,
   title={Automated quantification of stereotypical motor movements in autism using persistent homology},
