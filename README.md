@@ -1,7 +1,7 @@
 
 # AQSM-SW1PerS: Automated Quantification of Stereotypical Motor Movements via Sliding Windows and 1-Persistence Scoring
 
-This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* (currently in submission) associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
+This repository contains code, models, and analysis tools introduced in the paper *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology* associated with the **AQSM-SW1PerS** algorithm, a pipeline for detecting repetitive movements using topological data analysis on time series data derived from pose estimation software.
 
 ## Table of Contents
 1. [Abstract](#abstract)
@@ -173,21 +173,18 @@ plt.show()
 
 The preprint for our paper is available:
 
+> MBaye, A. A., Perea, J. A., Tralie, C. J., and Goodwin, M. S.
+> 
 > MBaye, Austin A., Perea, Jose A., Tralie, Christopher J., & Goodwin, Matthew S.  
 > *Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology.*  
-> bioRxiv, 2025. https://doi.org/10.1101/2025.09.03.674008  
+> Scientific Reports (2026). https://doi.org/10.1038/s41598-026-60095-8
 
 BibTeX:
 ```bibtex
-@article{MBaye2025AQSM,
-  author    = {MBaye, Austin A and Perea, Jose A. and Tralie, Christopher J. and Goodwin, Matthew S.},
-  title     = {Automated Quantification of Stereotypical Motor Movements in Autism Using Persistent Homology},
-  elocation-id = {2025.09.03.674008},
-  year      = {2025},
-  doi       = {10.1101/2025.09.03.674008},
-  publisher = {Cold Spring Harbor Laboratory},
-  url       = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008},
-  eprint    = {https://www.biorxiv.org/content/early/2025/09/05/2025.09.03.674008.full.pdf},
-  journal   = {bioRxiv}
+@article{mbaye2026automated,
+  title={Automated quantification of stereotypical motor movements in autism using persistent homology},
+  author={MBaye, Austin A and Perea, Jose A and Tralie, Christopher J and Goodwin, Matthew S},
+  journal={Scientific Reports},
+  year={2026},
+  publisher={Nature Publishing Group UK London}
 }
-
